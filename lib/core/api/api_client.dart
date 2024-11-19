@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:stack_trace/stack_trace.dart';
 
@@ -21,7 +22,7 @@ extension ResponseUtils on http.Response {
 
   APIException get error {
     if (statusCode == 401) {
-      return UnauthorizedException(error: ApiError((b) {
+      return UnauthorizedException(error: ApiError((ApiErrorBuilder b) {
         b.message = 'Unauthorized';
       }));
     }
@@ -30,11 +31,11 @@ extension ResponseUtils on http.Response {
       return APIException(error: ApiError.fromJson(jsonMap!));
     } catch (e) {
       if (e.toString().toLowerCase().contains('unauthorized')) {
-        return UnauthorizedException(error: ApiError((b) {
+        return UnauthorizedException(error: ApiError((ApiErrorBuilder b) {
           b.message = 'Unauthorized';
         }));
       }
-      return SomethingWentWrongAPI(error: ApiError((b) {
+      return SomethingWentWrongAPI(error: ApiError((ApiErrorBuilder b) {
         b.message = 'Something went wrong';
       }));
     }
@@ -63,9 +64,11 @@ abstract class ApiClient {
       final http.Response response = await request();
       final APILog apiLog = APILog._(response, s);
       APILog.allApiLogs.add(apiLog);
-      print('''
+      if (kDebugMode) {
+        print('''
     $apiLog
       ''');
+      }
       if (response.isSuccess) {
         return response;
       }
@@ -185,7 +188,7 @@ abstract class ApiClient {
 
 class APILog {
   APILog._(this._r, this._reqStack) : logTime = DateTime.now();
-  static final List<APILog> allApiLogs = [];
+  static final List<APILog> allApiLogs = <APILog>[];
   final http.Response _r;
   final Trace _reqStack;
   final DateTime logTime;
@@ -197,8 +200,8 @@ class APILog {
     return _id!;
   }
 
-  static final _jsonEncoder = JsonEncoder.withIndent(' ');
-  String? _log;
+  // static final _jsonEncoder = JsonEncoder.withIndent(' ');
+  // String? _log;
 
   Uri get uri => _r.request!.url;
 
@@ -215,23 +218,23 @@ class APILog {
   String get responseBody => _r.body;
 
   static String _cURLRepresentation(http.BaseRequest options) {
-    List<String> components = ['curl -i'];
+    final List<String> components = <String>['curl -i'];
     if (options.method.toUpperCase() != 'GET') {
       components.add('-X ${options.method}');
     }
 
-    options.headers.forEach((k, v) {
+    options.headers.forEach((String k, String v) {
       if (k != 'Cookie') {
         components.add('-H "$k: $v"');
       }
     });
 
     if (options is http.Request && options.body.isNotEmpty) {
-      final data = options.body.replaceAll('"', '\\"');
+      final String data = options.body.replaceAll('"', r'\"');
       components.add('-d "$data"');
     }
 
-    components.add('"${options.url.toString()}"');
+    components.add('"${options.url}"');
 
     return components.join(' \\\n\t');
   }
