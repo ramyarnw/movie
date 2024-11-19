@@ -1,28 +1,57 @@
+import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
-import 'serializers.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:movie/model/review.dart';
+import 'package:movie/model/serializers.dart';
+import 'package:movie/model/storage_model/storage_item.dart';
+import 'package:movie/model/tv_shows.dart';
+
+import 'auth_user.dart';
+import 'cast.dart';
+import 'movie.dart';
 
 part 'app_state.g.dart';
 
 abstract class AppState implements Built<AppState, AppStateBuilder> {
-  factory AppState([void Function(AppStateBuilder)? updates]) = _$AppState;
-
   AppState._();
 
-  Map<String, dynamic>? toJson() {
+  factory AppState([void Function(AppStateBuilder) updates]) = _$AppState;
+
+  Map<String, dynamic> toJson() {
     return serializers.serializeWith(AppState.serializer, this)
-        as Map<String, dynamic>?;
+        as Map<String, int>;
   }
 
-  static AppState? fromJson(Map<String, dynamic> json) {
-    return serializers.deserializeWith(AppState.serializer, json);
+  static AppState fromJson(Map<String, dynamic> json) {
+    return serializers.deserializeWith(AppState.serializer, json)!;
   }
 
   static Serializer<AppState> get serializer => _$appStateSerializer;
 
-  static void _initializeBuilder(AppStateBuilder b) {
-    b.count = 0;
-  }
+  BuiltList<Movie>? get popularMovie;
 
-  int? get count;
+  BuiltList<Movie>? get topRatedMovie;
+
+  BuiltList<Movie>? get upcomingMovie;
+
+  BuiltList<Cast>? get castForMovie;
+
+  BuiltList<Movie>? get moviesOfCast;
+
+  BuiltList<TvShows>? get tvShowsOfCast;
+
+  Movie? get currentPic;
+
+  Cast get currentPicCast;
+
+  AuthUser? get currentUser;
+
+  BuiltMap<String, BuiltList<Review>>? get movieReview;
+
+  BuiltMap<String, BuiltList<Review>>? get tvReview;
+
+  StorageItem? get item;
+
+  BuiltList<StorageItem>? get itemList;
 }
