@@ -1,17 +1,17 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
-import 'package:movie/model/serializers.dart';
+import 'serializers.dart';
 
 part 'tv_shows.g.dart';
 
 abstract class TvShows implements Built<TvShows, TvShowsBuilder> {
-  TvShows._();
 
   factory TvShows([void Function(TvShowsBuilder) updates]) = _$TvShows;
+  TvShows._();
 
   Map<String, dynamic> toJson() {
-    return serializers.serializeWith(TvShows.serializer, this)
+    return serializers.serializeWith(TvShows.serializer, this)!
         as Map<String, dynamic>;
   }
 

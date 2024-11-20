@@ -1,15 +1,15 @@
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
-import 'package:movie/model/serializers.dart';
+import 'serializers.dart';
 
 part 'review.g.dart';
 
 abstract class Review implements Built<Review, ReviewBuilder> {
-  Review._();
   factory Review([void Function(ReviewBuilder) updates]) = _$Review;
+  Review._();
 
   Map<String, dynamic> toJson() {
-    return serializers.serializeWith(Review.serializer, this)
+    return serializers.serializeWith(Review.serializer, this)!
         as Map<String, dynamic>;
   }
 

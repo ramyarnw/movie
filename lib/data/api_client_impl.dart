@@ -1,6 +1,4 @@
-import 'dart:convert';
 
-import 'package:http/src/response.dart';
 
 import '../core/api/api_client.dart';
 
@@ -10,12 +8,12 @@ class ApiClientImpl extends ApiClient {
     Future<void> Function()? onLogout,
     Future<void> Function()? onRefresh,
   }) {
-    // TODO: implement setAuthHandlers
+
   }
 
   @override
   void setAuthorizationKey(String? key) {
-    // TODO: implement setAuthorizationKey
+
   }
 
   @override
@@ -23,6 +21,6 @@ class ApiClientImpl extends ApiClient {
     required String tid,
     required String cid,
   }) {
-    // TODO: implement setTenantCompanyID
+
   }
 }

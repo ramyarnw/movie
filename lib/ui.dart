@@ -4,7 +4,6 @@ library ui;
 export 'package:flutter/cupertino.dart' hide RefreshCallback;
 export 'package:flutter/material.dart';
 export 'package:flutter/services.dart';
-export 'package:provider/provider.dart';
 export 'package:movie/provider/provider_utils.dart';
 export 'package:movie/shared.dart'; // shared
 export 'package:movie/views/navigation/router_utils.dart';
@@ -16,3 +15,4 @@ export 'package:movie/views/widgets/app_scaffold.dart';
 export 'package:movie/views/widgets/app_texts.dart';
 export 'package:movie/views/widgets/extensions.dart';
 export 'package:movie/views/widgets/mixins.dart';
+export 'package:provider/provider.dart';
