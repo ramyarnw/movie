@@ -1,9 +1,13 @@
 import 'dart:async';
 
-
+import 'package:built_collection/built_collection.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/services.dart';
+import 'package:movie/model/auth_user.dart';
+import 'package:movie/model/review.dart';
+
 import '../core/services/firebase_service.dart';
 
 class FireBaseServiceImpl implements FireBaseService {
@@ -62,7 +66,8 @@ class FireBaseServiceImpl implements FireBaseService {
   CollectionReference<Map<String, dynamic>> get tvCollection =>
       firestore.collection('tv');
 
-  CollectionReference<Map<String, dynamic>> movieReviewCollection(String movieId) =>
+  CollectionReference<Map<String, dynamic>> movieReviewCollection(
+          String movieId) =>
       movieCollection.doc(movieId).collection('review');
 
   CollectionReference<Map<String, dynamic>> tvReviewCollection(String tvId) =>
@@ -169,7 +174,6 @@ class FireBaseServiceImpl implements FireBaseService {
     await tvReviewCollection(tvId).doc(review.id).set(review.toJson());
   }
 
-
   @override
   Future<AuthUser> updateUser({required AuthUser user}) async {
     await userCollection.doc(user.id).set(user.toJson());
@@ -177,15 +181,15 @@ class FireBaseServiceImpl implements FireBaseService {
   }
 
   @override
-  Future<AuthUser> updateProfile({required Uint8List file, required AuthUser user}) async {
-
+  Future<AuthUser> updateProfile(
+      {required Uint8List file, required AuthUser user}) async {
     final Reference storageRef = FirebaseStorage.instance.ref();
     final Reference userProfileRef = storageRef.child('users/${user.id}.jpg');
     try {
       await userProfileRef.putData(file);
       final String url = await userProfileRef.getDownloadURL();
 
-     return await updateUser(user: user.rebuild((a)=>a.profile = url));
+      return await updateUser(user: user.rebuild((a) => a.profile = url));
     } on FirebaseException catch (e) {
       rethrow;
     }

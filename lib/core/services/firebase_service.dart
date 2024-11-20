@@ -1,5 +1,7 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:flutter/services.dart';
+import 'package:movie/model/auth_user.dart';
+import 'package:movie/model/review.dart';
 
 abstract class FireBaseService {
   Future<String> sendOtp({required String phoneNo});

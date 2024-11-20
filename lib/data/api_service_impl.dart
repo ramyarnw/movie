@@ -2,10 +2,10 @@ import 'dart:convert';
 
 import 'package:built_collection/built_collection.dart';
 import 'package:http/http.dart' as http;
-import 'package:movie_app/core/api_service.dart';
-import 'package:movie_app/models/cast.dart';
-import 'package:movie_app/models/movie.dart';
-import 'package:movie_app/models/tv_shows.dart';
+import 'package:movie/model/cast.dart';
+import 'package:movie/model/movie.dart';
+import 'package:movie/model/tv_shows.dart';
+
 
 import '../core/api/api_client.dart';
 import '../core/services/api_service.dart';

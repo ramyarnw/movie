@@ -1,4 +1,5 @@
 import 'package:built_collection/built_collection.dart';
+import 'package:movie/model/storage_model/storage_item.dart';
 
 abstract class StorageService {
   Future<void> writeSecureData({required StorageItem newItem});

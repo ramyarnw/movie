@@ -3,6 +3,12 @@ import 'dart:async';
 import 'package:built_collection/built_collection.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
+import 'package:movie/core/services/api_service.dart';
+import 'package:movie/core/services/firebase_service.dart';
+import 'package:movie/core/services/storage_service.dart';
+import 'package:movie/data/api_service_impl.dart';
+import 'package:movie/data/firebase_service_impl.dart';
+import 'package:movie/data/storage_service_impl.dart';
 import 'package:state_notifier/state_notifier.dart';
 
 import '../model/app_state.dart';

@@ -1,5 +1,7 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:movie/model/storage_model/storage_item.dart';
+
 import '../core/services/storage_service.dart';
 
 class StorageServiceImpl implements StorageService {
