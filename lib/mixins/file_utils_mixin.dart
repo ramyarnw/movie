@@ -14,10 +14,10 @@ import '../../fs/fs.dart';
 extension UsageSize on double {
   String getFileSize() {
     if (this <= 0) {
-      return "0 B";
+      return '0 B';
     }
-    const suffixes = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
-    var i = (log(this) / log(1024)).floor();
+    const List<String> suffixes = <String>['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+    final int i = (log(this) / log(1024)).floor();
     return '${(this / pow(1024, i)).toStringAsFixed(2)} ${suffixes[i]}';
   }
 }
@@ -27,7 +27,7 @@ extension AppFileUtils on AppFile {
     double bytes = 0;
     bytes = (await length()).toDouble();
     if (bytes <= 0) {
-      return "0 B";
+      return '0 B';
     }
     return bytes.getFileSize();
   }
@@ -37,7 +37,7 @@ extension AppFileUtils on AppFile {
 
 class AppIODirectory extends AppDirectory {
   AppIODirectory._(this._dir) {
-    _children = _dir.listSync().map((e) {
+    _children = _dir.listSync().map((FileSystemEntity e) {
       if (FileSystemEntity.isDirectorySync(e.path)) {
         return (e as Directory).toAppDirectory();
       }
@@ -115,7 +115,7 @@ class AppPlatformFile extends AppFile {
   @override
   String get path => _file.path!;
 
-  final _chunks = <int>[];
+  final List<int> _chunks = <int>[];
 
   @override
   Future<Uint8List> readAsBytes() async {
@@ -125,7 +125,7 @@ class AppPlatformFile extends AppFile {
       }
       final Completer<void> c = Completer();
 
-      final sub = readStream().listen(
+      final StreamSubscription<Uint8List> sub = readStream().listen(
         (List<int> event) {
           _chunks.addAll(event);
         },
@@ -142,7 +142,7 @@ class AppPlatformFile extends AppFile {
       return Uint8List.fromList(_chunks);
     }
 
-    return await XFile(path).readAsBytes();
+    return XFile(path).readAsBytes();
   }
 
   @override
@@ -152,10 +152,10 @@ class AppPlatformFile extends AppFile {
   Stream<Uint8List> readStream() {
     assert(_file.readStream != null);
 
-    return _file.readStream?.map((event) {
+    return _file.readStream?.map((List<int> event) {
           return event as Uint8List;
         }).asBroadcastStream() ??
-        Stream<Uint8List>.fromIterable([]).asBroadcastStream();
+        Stream<Uint8List>.fromIterable(<Uint8List>[]).asBroadcastStream();
   }
 
   @override
@@ -190,7 +190,7 @@ class AppNetworkFile extends AppFile {
 
   @override
   Future<int> length() {
-    throw UnimplementedError("Cannot get length of network file");
+    throw UnimplementedError('Cannot get length of network file');
   }
 
   @override
@@ -286,7 +286,6 @@ mixin FileUtils {
     final FilePickerResult? result = await FilePicker.platform.pickFiles(
       allowMultiple: true,
       withReadStream: true,
-      withData: false,
     );
 
     return result?.files.map((PlatformFile element) {

@@ -2,13 +2,11 @@ import 'dart:convert';
 
 import 'package:built_collection/built_collection.dart';
 import 'package:http/http.dart' as http;
-import 'package:movie_app/core/api_service.dart';
-import 'package:movie_app/models/cast.dart';
-import 'package:movie_app/models/movie.dart';
-import 'package:movie_app/models/tv_shows.dart';
-
 import '../core/api/api_client.dart';
 import '../core/services/api_service.dart';
+import '../model/cast.dart';
+import '../model/movie.dart';
+import '../model/tv_shows.dart';
 import 'api_client_impl.dart';
 
 extension on String {
@@ -36,14 +34,50 @@ class APIUrls {
 
   String castMovies(int id) => '$_castUrl/$id/movie_credits';
 
-  String moviePic(int id)=> '$_movieUrl/$id';
+  String moviePic(int id) => '$_movieUrl/$id';
 
-  String castPic(int id)=> '$_castUrl/$id';
+  String castPic(int id) => '$_castUrl/$id';
+}
+
+
+// List getBodyList(http.Response res,String key){
+//   return jsonDecode(res.body)[key] as List;
+// }
+//
+// extension on String {
+//   List getBodyList(http.Response res){
+//     return jsonDecode(res.body)[this] as List;
+//   }
+// }
+extension on http.Response {
+  List getBodyList(String key) {
+    return jsonDecode(body)[key] as List;
+  }
+
+  List<Map<String, dynamic>> getJsonList(String key) {
+    return getBodyList(key).cast<Map<String, dynamic>>();
+  }
+
+  BuiltList<T> getListData<T>(String key,
+      T Function(Map<String, dynamic>) fromJson) {
+    final List<T> data = <T>[];
+    for (final Map<String, dynamic> i in getJsonList(key)) {
+      data.add(fromJson(i));
+    }
+    return data.toBuiltList();
+  }
+}
+extension on http.Response{
+ T getData<T>( T Function(Map<String, dynamic>) fromJson){
+    final l = jsonDecode(body) as Map<String,dynamic>;
+   return fromJson(l);
+  }
 }
 
 class ApiServiceImpl implements ApiService {
   final APIUrls url = APIUrls();
-final ApiClient client=ApiClientImpl();
+  final ApiClient client = ApiClientImpl();
+
   Map<String, String> get defaultHeader =>
       <String, String>{
         'Authorization':
@@ -55,12 +89,10 @@ final ApiClient client=ApiClientImpl();
     final http.Response response =
     await client.get(url.movieCast(id).toUri(), headers: defaultHeader);
     if (response.statusCode == 200) {
-      final List body = jsonDecode(response.body)['cast'] as List;
-      final List<Cast> cast = <Cast>[];
-      for (final i in body) {
-        cast.add(Cast.fromJson(i));
-      }
-      return cast.toBuiltList();
+      // final l = getBodyList(response, 'cast');
+      // final ll = response.getBodyList('cast');
+      // final lll = 'cast'.getBodyList(response);
+      return response.getListData('cast', Cast.fromJson);
     }
     throw 'Failed to fetch top rated data';
   }
@@ -70,12 +102,7 @@ final ApiClient client=ApiClientImpl();
     final http.Response response =
     await client.get(url.castMovies(id).toUri(), headers: defaultHeader);
     if (response.statusCode == 200) {
-      List body = jsonDecode(response.body)['cast'] as List;
-      List<Movie> movies = <Movie>[];
-      for (final i in body) {
-        movies.add(Movie.fromJson(i));
-      }
-      return movies.toBuiltList();
+      return response.getListData<Movie>('movie', Movie.fromJson);
     }
     throw 'Failed to fetch cast movies data';
   }
@@ -85,28 +112,31 @@ final ApiClient client=ApiClientImpl();
     final http.Response response =
     await client.get(url.popular.toUri(), headers: defaultHeader);
     if (response.statusCode == 200) {
-      List body = jsonDecode(response.body)['results'] as List;
-      final List<Movie> movies = <Movie>[];
-      for (final i in body) {
-        movies.add(Movie.fromJson(i));
-      }
-
-      return movies.toBuiltList();
+      // final List body = jsonDecode(response.body)['results'] as List;
+      // final List<Movie> movies = <Movie>[];
+      // for (final i in body) {
+      //   movies.add(Movie.fromJson(i));
+      // }
+      //
+      // return movies.toBuiltList();
+      return response.getListData('results', Movie.fromJson);
     }
-    throw 'Failed to fetch Data;
+    throw 'failed to load popular movies';
   }
+
 
   @override
   Future<BuiltList<Movie>> getTopRatedMovie() async {
     final http.Response response =
-    await client.get((url.topRated).toUri(), headers: defaultHeader);
+    await client.get(url.topRated.toUri(), headers: defaultHeader);
     if (response.statusCode == 200) {
-      List body = jsonDecode(response.body)['results'] as List;
-      final List<Movie> movies = <Movie>[];
-      for (final i in body) {
-        movies.add(Movie.fromJson(i));
-      }
-      return movies.toBuiltList();
+      // final List body = jsonDecode(response.body)['results'] as List;
+      // final List<Movie> movies = <Movie>[];
+      // for (final i in body) {
+      //   movies.add(Movie.fromJson(i));
+      // }
+      // return movies.toBuiltList();
+      return response.getListData('results', Movie.fromJson);
     }
     throw 'Failed to fetch top rated data';
   }
@@ -114,14 +144,16 @@ final ApiClient client=ApiClientImpl();
   @override
   Future<BuiltList<TvShows>> getTvShowsOfCast({required int id}) async {
     final http.Response response =
-    await client.get((url.castTvShow(id)).toUri(), headers: defaultHeader);
+    await client.get(url.castTvShow(id).toUri(), headers: defaultHeader);
     if (response.statusCode == 200) {
-      List body = jsonDecode(response.body)['cast'] as List;
-      List<TvShows> tvShows = [];
-      for (final i in body) {
-        tvShows.add(TvShows.fromJson(i));
-      }
-      return tvShows.toBuiltList();
+      // final List body = jsonDecode(response.body)['cast'] as List;
+      // final List<TvShows> tvShows = <TvShows>[];
+      // for (final i in body) {
+      //   tvShows.add(TvShows.fromJson(i));
+      // }
+      // return tvShows.toBuiltList();
+      return response.getListData('cast', TvShows.fromJson);
+
     }
     throw 'Failed to fetch cast tv show data';
   }
@@ -131,12 +163,13 @@ final ApiClient client=ApiClientImpl();
     final http.Response response =
     await client.get(url.upcoming.toUri(), headers: defaultHeader);
     if (response.statusCode == 200) {
-      List body = jsonDecode(response.body)['results'] as List;
-      final List<Movie> movies = [];
-      for (final i in body) {
-        movies.add(Movie.fromJson(i));
-      }
-      return movies.toBuiltList();
+      // final List body = jsonDecode(response.body)['results'] as List;
+      // final List<Movie> movies = [];
+      // for (final i in body) {
+      //   movies.add(Movie.fromJson(i));
+      // }
+      // return movies.toBuiltList();
+      return response.getListData('results', Movie.fromJson);
     }
     throw 'Failed to fetch upcoming data';
   }
@@ -144,14 +177,14 @@ final ApiClient client=ApiClientImpl();
   @override
   Future<Movie> getMovieForId({required int id}) async {
     final http.Response response = await http.get(
-        (url.moviePic(id)).toUri(), headers: defaultHeader);
+        url.moviePic(id).toUri(), headers: defaultHeader);
     if (response.statusCode == 200) {
-      var body = jsonDecode(response.body);
-      return Movie.fromJson(body);
+      return response.getData(Movie.fromJson);
+      // final body = jsonDecode(response.body);
+      // return Movie.fromJson(body);
     }
     throw 'Failed to load movie image';
   }
-
 
 
   @override
@@ -159,8 +192,7 @@ final ApiClient client=ApiClientImpl();
     final http.Response response = await http.get(
         url.castPic(id).toUri(), headers: defaultHeader);
     if (response.statusCode == 200) {
-      var body = jsonDecode(response.body);
-      return Cast.fromJson(body);
+      return response.getData(Cast.fromJson);
     }
     throw 'Failed to load cast image';
   }

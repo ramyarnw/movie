@@ -1,16 +1,16 @@
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
-import 'package:movie/model/serializers.dart';
+import 'serializers.dart';
 
 part 'cast.g.dart';
 
 abstract class Cast implements Built<Cast, CastBuilder> {
-  Cast._();
 
   factory Cast([void Function(CastBuilder) updates]) = _$Cast;
+  Cast._();
 
   Map<String, dynamic> toJson() {
-    return serializers.serializeWith(Cast.serializer, this)
+    return serializers.serializeWith(Cast.serializer, this)!
         as Map<String, dynamic>;
   }
 
@@ -26,8 +26,8 @@ abstract class Cast implements Built<Cast, CastBuilder> {
       ..gender = 1
       ..id = 1267329
       ..knownForDepartment = 'Acting'
-      ..name = 'Lupita Nyong'
-      ..originalName = 'Lupita Nyong'
+      ..name = 'Lupita Young'
+      ..originalName = 'Lupita Young'
       ..popularity = 32.847
       ..profilePath = '/y40Wu1T742kynOqtwXASc5Qgm49.jpg'
       ..castId = 9

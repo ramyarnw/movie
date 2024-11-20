@@ -74,7 +74,7 @@ abstract class ApiClient {
       }
 
       throw response.error;
-    } catch (e, s) {
+    } catch (e) {
       if (e is UnauthorizedException) {
         // refresh token and retry request
         if (retry < maxRetries) {

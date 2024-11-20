@@ -1,10 +1,14 @@
 import 'dart:async';
 
 
+import 'package:built_collection/built_collection.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/services.dart';
 import '../core/services/firebase_service.dart';
+import '../model/auth_user.dart';
+import '../model/review.dart';
 
 class FireBaseServiceImpl implements FireBaseService {
   FirebaseAuth auth = FirebaseAuth.instance;
@@ -17,7 +21,7 @@ class FireBaseServiceImpl implements FireBaseService {
     await auth.verifyPhoneNumber(
       phoneNumber: phoneNo,
       codeSent: (String verificationId, int? resendToken) async {
-        vid = verificationId ?? '';
+        vid = verificationId;
         if (!_c.isCompleted) {
           _c.complete();
         }
@@ -29,7 +33,7 @@ class FireBaseServiceImpl implements FireBaseService {
         throw error;
       },
       codeAutoRetrievalTimeout: (String verificationId) {
-        vid = verificationId ?? '';
+        vid = verificationId;
         if (!_c.isCompleted) {
           _c.complete();
         }
@@ -71,11 +75,11 @@ class FireBaseServiceImpl implements FireBaseService {
   @override
   Future<AuthUser> getUser(
       {required String uid, required String phoneNo}) async {
-    final userDoc = userCollection.doc(uid);
+    final DocumentReference<Map<String, dynamic>> userDoc = userCollection.doc(uid);
     final Map<String, dynamic>? userData = (await userDoc.get()).data();
     if (userData == null) {
-      var authUser = AuthUser(
-        (b) => b
+      final AuthUser authUser = AuthUser(
+        (AuthUserBuilder b) => b
           ..phoneNo = phoneNo
           ..id = uid,
       );
@@ -88,30 +92,30 @@ class FireBaseServiceImpl implements FireBaseService {
   @override
   Future<void> createMovieReview(
       {required String movieId, required Review review}) async {
-    var doc = movieReviewCollection(movieId).doc();
-    var a = review.rebuild((b) => b.id = doc.id);
+    final DocumentReference<Map<String, dynamic>> doc = movieReviewCollection(movieId).doc();
+    final Review a = review.rebuild((b) => b.id = doc.id);
     await doc.set(a.toJson());
   }
 
   @override
   Future<void> createTVReview(
       {required String tvId, required Review review}) async {
-    var doc = tvReviewCollection(tvId).doc();
-    var a = review.rebuild((b) => b.id = doc.id);
+    final DocumentReference<Map<String, dynamic>> doc = tvReviewCollection(tvId).doc();
+    final Review a = review.rebuild((ReviewBuilder b) => b.id = doc.id);
     await doc.set(a.toJson());
   }
 
   @override
   Future<void> deleteMovieReview(
       {required String movieId, required String reviewId}) async {
-    var doc = movieReviewCollection(movieId).doc(reviewId);
+    final DocumentReference<Map<String, dynamic>> doc = movieReviewCollection(movieId).doc(reviewId);
     await doc.delete();
   }
 
   @override
   Future<void> deleteTVReview(
       {required String tvId, required String reviewId}) async {
-    var doc = tvReviewCollection(tvId).doc(reviewId);
+    final DocumentReference<Map<String, dynamic>> doc = tvReviewCollection(tvId).doc(reviewId);
     await doc.delete();
   }
 
@@ -141,19 +145,19 @@ class FireBaseServiceImpl implements FireBaseService {
 
   @override
   Stream<BuiltList<Review>> listenMovieReview({required String movieId}) {
-    var snapshots = movieReviewCollection(movieId).snapshots();
+    final Stream<QuerySnapshot<Map<String, dynamic>>> snapshots = movieReviewCollection(movieId).snapshots();
 
     return snapshots.map(
-      (b) => b.docs.map((e) => Review.fromJson(e.data())).toBuiltList(),
+      (QuerySnapshot<Map<String, dynamic>> b) => b.docs.map((QueryDocumentSnapshot<Map<String, dynamic>> e) => Review.fromJson(e.data())).toBuiltList(),
     );
   }
 
   @override
   Stream<BuiltList<Review>> listenTVReview({required String tvId}) {
-    var snapshots = movieReviewCollection(tvId).snapshots();
+    final Stream<QuerySnapshot<Map<String, dynamic>>> snapshots = movieReviewCollection(tvId).snapshots();
 
     return snapshots.map(
-      (b) => b.docs.map((e) => Review.fromJson(e.data())).toBuiltList(),
+      (QuerySnapshot<Map<String, dynamic>> b) => b.docs.map((QueryDocumentSnapshot<Map<String, dynamic>> e) => Review.fromJson(e.data())).toBuiltList(),
     );
   }
 
@@ -185,8 +189,8 @@ class FireBaseServiceImpl implements FireBaseService {
       await userProfileRef.putData(file);
       final String url = await userProfileRef.getDownloadURL();
 
-     return await updateUser(user: user.rebuild((a)=>a.profile = url));
-    } on FirebaseException catch (e) {
+     return await updateUser(user: user.rebuild((AuthUserBuilder a)=>a.profile = url));
+    } on FirebaseException {
       rethrow;
     }
   }

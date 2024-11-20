@@ -6,12 +6,12 @@ import '../serializers.dart';
 part 'storage_item.g.dart';
 
 abstract class StorageItem implements Built<StorageItem, StorageItemBuilder> {
-  StorageItem._();
   factory StorageItem([void Function(StorageItemBuilder) updates]) =
       _$StorageItem;
+  StorageItem._();
 
   Map<String, dynamic> toJson() {
-    return serializers.serializeWith(StorageItem.serializer, this)
+    return serializers.serializeWith(StorageItem.serializer, this)!
         as Map<String, dynamic>;
   }
 

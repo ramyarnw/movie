@@ -1,16 +1,16 @@
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
-import 'package:movie/model/serializers.dart';
+import 'serializers.dart';
 
 part 'auth_user.g.dart';
 
 abstract class AuthUser implements Built<AuthUser, AuthUserBuilder> {
-  AuthUser._();
 
   factory AuthUser([void Function(AuthUserBuilder) updates]) = _$AuthUser;
+  AuthUser._();
 
   Map<String, dynamic> toJson() {
-    return serializers.serializeWith(AuthUser.serializer, this)
+    return serializers.serializeWith(AuthUser.serializer, this)!
         as Map<String, dynamic>;
   }
 
