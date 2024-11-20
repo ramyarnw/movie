@@ -13,7 +13,7 @@ class LoadPage extends StatefulWidget {
 }
 
 class _LoadPageState extends State<LoadPage> {
-  var newLaunch;
+  late bool newLaunch;
 
   @override
   void initState() {
@@ -21,7 +21,7 @@ class _LoadPageState extends State<LoadPage> {
     loadNewLaunch();
   }
 
-  loadNewLaunch() async {
+  Future<void>loadNewLaunch() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       prefs.setBool('newLaunch', false);

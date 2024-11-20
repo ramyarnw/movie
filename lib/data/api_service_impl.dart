@@ -50,8 +50,8 @@ class APIUrls {
 //   }
 // }
 extension on http.Response {
-  List getBodyList(String key) {
-    return jsonDecode(body)[key] as List;
+  List<Map<String, dynamic>> getBodyList(String key) {
+    return (jsonDecode(body) as Map<String,dynamic>)[key] as List<Map<String, dynamic>>;
   }
 
   List<Map<String, dynamic>> getJsonList(String key) {
@@ -69,7 +69,7 @@ extension on http.Response {
 }
 extension on http.Response{
  T getData<T>( T Function(Map<String, dynamic>) fromJson){
-    final l = jsonDecode(body) as Map<String,dynamic>;
+    final Map<String, dynamic> l = jsonDecode(body) as Map<String,dynamic>;
    return fromJson(l);
   }
 }
@@ -94,7 +94,7 @@ class ApiServiceImpl implements ApiService {
       // final lll = 'cast'.getBodyList(response);
       return response.getListData('cast', Cast.fromJson);
     }
-    throw 'Failed to fetch top rated data';
+    throw response.error;
   }
 
   @override
@@ -104,7 +104,7 @@ class ApiServiceImpl implements ApiService {
     if (response.statusCode == 200) {
       return response.getListData<Movie>('movie', Movie.fromJson);
     }
-    throw 'Failed to fetch cast movies data';
+    throw response.error;
   }
 
   @override
@@ -121,7 +121,7 @@ class ApiServiceImpl implements ApiService {
       // return movies.toBuiltList();
       return response.getListData('results', Movie.fromJson);
     }
-    throw 'failed to load popular movies';
+    throw response.error;
   }
 
 
@@ -138,7 +138,7 @@ class ApiServiceImpl implements ApiService {
       // return movies.toBuiltList();
       return response.getListData('results', Movie.fromJson);
     }
-    throw 'Failed to fetch top rated data';
+    throw response.error;
   }
 
   @override
@@ -155,7 +155,7 @@ class ApiServiceImpl implements ApiService {
       return response.getListData('cast', TvShows.fromJson);
 
     }
-    throw 'Failed to fetch cast tv show data';
+    throw response.error;
   }
 
   @override
@@ -171,7 +171,7 @@ class ApiServiceImpl implements ApiService {
       // return movies.toBuiltList();
       return response.getListData('results', Movie.fromJson);
     }
-    throw 'Failed to fetch upcoming data';
+    throw response.error;
   }
 
   @override
@@ -183,7 +183,7 @@ class ApiServiceImpl implements ApiService {
       // final body = jsonDecode(response.body);
       // return Movie.fromJson(body);
     }
-    throw 'Failed to load movie image';
+    throw response.error;
   }
 
 
@@ -194,6 +194,6 @@ class ApiServiceImpl implements ApiService {
     if (response.statusCode == 200) {
       return response.getData(Cast.fromJson);
     }
-    throw 'Failed to load cast image';
+    throw response.error;
   }
 }

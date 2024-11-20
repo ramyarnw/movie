@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../../model/review.dart';
 import '../../../provider/provider_utils.dart';
+import '../../widgets/movie_widgets/mixins/movie_mixin.dart';
 import 'create_or_edit_review.dart';
 
 
@@ -15,7 +16,7 @@ class MovieReviewScreen extends StatefulWidget {
   State<MovieReviewScreen> createState() => _MovieReviewScreenState();
 }
 
-class _MovieReviewScreenState extends State<MovieReviewScreen> with MovieMixin {
+class _MovieReviewScreenState extends State<MovieReviewScreen> with MovieMixin<MovieReviewScreen> {
   @override
   void initState() {
     super.initState();
@@ -31,7 +32,7 @@ class _MovieReviewScreenState extends State<MovieReviewScreen> with MovieMixin {
   @override
   Widget build(BuildContext context) {
     final BuiltList<Review> review =
-        context.appState.movieReview?[widget.movieId] ?? BuiltList();
+        context.appState.movieReview?[widget.movieId] ?? BuiltList<Review>();
 
     return Scaffold(
       appBar: AppBar(
@@ -40,7 +41,7 @@ class _MovieReviewScreenState extends State<MovieReviewScreen> with MovieMixin {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(onPressed: () {
         Navigator.push(context,
-            MaterialPageRoute(builder: (BuildContext context) {
+            MaterialPageRoute<dynamic>(builder: (BuildContext context) {
               return CreateOrEditReview(movieId: widget.movieId.toString());
             },
             ),

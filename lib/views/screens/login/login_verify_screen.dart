@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+
+import '../../widgets/movie_widgets/mixins/auth_mixin.dart';
 class LoginVerifyScreen extends StatefulWidget {
   const LoginVerifyScreen({super.key, required this.vid});
 
@@ -28,7 +30,7 @@ class _LoginVerifyScreenState extends State<LoginVerifyScreen> with AuthMixin<Lo
     return Scaffold(
       appBar: AppBar(),
       body: Column(
-        children: [
+        children: <Widget>[
           TextField(
             controller: _controller,
             decoration: const InputDecoration(

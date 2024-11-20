@@ -6,6 +6,7 @@ import '../../../model/app_state.dart';
 import '../../../model/auth_user.dart';
 import '../../../model/movie.dart';
 import '../../../view_model/app_view_model.dart';
+import '../../widgets/movie_widgets/mixins/movie_mixin.dart';
 import '../login/edit_profile.dart';
 import '../login/login_screen.dart';
 import 'movie_detail_screen.dart';
@@ -24,9 +25,9 @@ class MovieHomePage extends StatefulWidget {
 }
 
 class _MovieHomePageState extends State<MovieHomePage>
-    with TickerProviderStateMixin, MovieMixin {
+    with TickerProviderStateMixin, MovieMixin<MovieHomePage> {
   late TabController tabController;
-  var loading = false;
+  bool loading = false;
 
   @override
   void initState() {
@@ -56,11 +57,11 @@ class _MovieHomePageState extends State<MovieHomePage>
   @override
   Widget build(BuildContext context) {
     final BuiltList<Movie> popular =
-        context.appState.popularMovie ?? BuiltList();
+        context.appState.popularMovie ?? BuiltList<Movie>();
     final BuiltList<Movie> upcoming =
-        context.appState.upcomingMovie ?? BuiltList();
+        context.appState.upcomingMovie ?? BuiltList<Movie>();
     final BuiltList<Movie> topRated =
-        context.appState.topRatedMovie ?? BuiltList();
+        context.appState.topRatedMovie ?? BuiltList<Movie>();
     final AuthUser? user = context.appState.currentUser;
     return Scaffold(
       appBar: AppBar(
@@ -73,7 +74,7 @@ class _MovieHomePageState extends State<MovieHomePage>
           'Book Movie',
           style: TextStyle(fontSize: 15, color: Colors.black),
         ),
-        actions: [
+        actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.brightness_3),
             color: Colors.black,
@@ -82,14 +83,14 @@ class _MovieHomePageState extends State<MovieHomePage>
           if (user == null) ElevatedButton(
                   onPressed: () {
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (BuildContext context) {
+                        MaterialPageRoute<dynamic>(builder: (BuildContext context) {
                       return const LoginScreen();
                     }));
                   },
                   child: const Text('Login')) else GestureDetector(
                   onTap: () {
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (BuildContext context) {
+                        MaterialPageRoute<dynamic>(builder: (BuildContext context) {
                       return const EditProfile();
                     }));
                   },
@@ -192,11 +193,11 @@ class MovieTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [
+      children: <Widget>[
         ElevatedButton(
           onPressed: () {
             Navigator.push(context,
-                MaterialPageRoute(builder: (BuildContext context) {
+                MaterialPageRoute<dynamic>(builder: (BuildContext context) {
               return MovieDetailScreen(
                 id: movie.id,
               );

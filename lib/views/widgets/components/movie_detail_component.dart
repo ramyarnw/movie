@@ -14,7 +14,7 @@ final Cast cast;
     return GestureDetector(
       onTap: () {
         Navigator.push(context,
-            MaterialPageRoute(builder: (BuildContext context) {
+            MaterialPageRoute<dynamic>(builder: (BuildContext context) {
               return CastDetailScreen(id:cast.id,);
             }));
       },

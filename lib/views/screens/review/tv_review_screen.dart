@@ -2,6 +2,7 @@ import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 import '../../../model/review.dart';
 import '../../../provider/provider_utils.dart';
+import '../../widgets/movie_widgets/mixins/movie_mixin.dart';
 import 'create_or_edit_tv_review.dart';
 
 class TvReviewScreen extends StatefulWidget {
@@ -13,7 +14,7 @@ class TvReviewScreen extends StatefulWidget {
   State<TvReviewScreen> createState() => _TvReviewScreenState();
 }
 
-class _TvReviewScreenState extends State<TvReviewScreen> with MovieMixin{
+class _TvReviewScreenState extends State<TvReviewScreen> with MovieMixin<TvReviewScreen>{
   @override
   void initState() {
     super.initState();
@@ -29,7 +30,7 @@ class _TvReviewScreenState extends State<TvReviewScreen> with MovieMixin{
   @override
   Widget build(BuildContext context) {
     final BuiltList<Review> review =
-        context.appState.tvReview?[widget.tvId] ?? BuiltList();
+        context.appState.tvReview?[widget.tvId] ?? BuiltList<Review>();
 
     return Scaffold(
       appBar: AppBar(
@@ -38,7 +39,7 @@ class _TvReviewScreenState extends State<TvReviewScreen> with MovieMixin{
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(onPressed: () {
         Navigator.push(context,
-            MaterialPageRoute(builder: (BuildContext context) {
+            MaterialPageRoute<dynamic>(builder: (BuildContext context) {
           return CreateOrEditTvReview(tvId: widget.tvId.toString());
         }));
       },child: const Icon(Icons.add),),

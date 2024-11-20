@@ -8,6 +8,7 @@ import '../../../model/movie.dart';
 
 import '../../../provider/provider_utils.dart';
 import '../../widgets/components/movie_detail_component.dart';
+import '../../widgets/movie_widgets/mixins/movie_mixin.dart';
 import '../review/movie_review_screen.dart';
 
 class MovieDetailScreen extends StatefulWidget {
@@ -19,7 +20,7 @@ class MovieDetailScreen extends StatefulWidget {
   State<MovieDetailScreen> createState() => _MovieDetailScreenState();
 }
 
-class _MovieDetailScreenState extends State<MovieDetailScreen> with MovieMixin{
+class _MovieDetailScreenState extends State<MovieDetailScreen> with MovieMixin<MovieDetailScreen>{
   bool loading = false;
 
   @override
@@ -69,7 +70,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> with MovieMixin{
     final Movie? movie = context.appState.currentPic;
 
     final BuiltList<Cast> castMovie =
-        context.appState.castForMovie ?? BuiltList();
+        context.appState.castForMovie ?? BuiltList<Cast>();
     if (movie == null) {
       return Container();
     }
@@ -94,7 +95,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> with MovieMixin{
                     child: ElevatedButton(
                       onPressed: () {
                         Navigator.of(context).push(
-                          MaterialPageRoute(
+                          MaterialPageRoute<dynamic>(
                             builder: (BuildContext c) =>
                                 MovieReviewScreen(movieId: movie.id),
                           ),
@@ -128,7 +129,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> with MovieMixin{
       body: loading
           ? const CircularProgressIndicator()
           : Column(
-              children: [
+              children: <Widget>[
                 const Text(
                   'SYNOPSIS',
                   style: TextStyle(fontSize: 20, color: Colors.black),
@@ -146,7 +147,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> with MovieMixin{
                       itemCount: castMovie.length,
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (BuildContext context, int index) {
-                        var p = castMovie[index];
+                        final Cast p = castMovie[index];
                         // final cast = casts[index];
                         // final name = castName[index];
                         return CastComponent(
@@ -164,7 +165,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> with MovieMixin{
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
                     Row(
-                      children: [
+                      children: <Widget>[
                         const Text(
                           'adult -',
                         ),
@@ -190,7 +191,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> with MovieMixin{
                       ],
                     ),
                     Row(
-                      children: [
+                      children: <Widget>[
                         const Text(
                           'genre_ids -',
                         ),
@@ -203,7 +204,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> with MovieMixin{
                       ],
                     ),
                     Row(
-                      children: [
+                      children: <Widget>[
                         const Text(
                           'id -',
                         ),
@@ -216,7 +217,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> with MovieMixin{
                       ],
                     ),
                     Row(
-                      children: [
+                      children: <Widget>[
                         const Text(
                           'original_language -',
                         ),
@@ -229,7 +230,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> with MovieMixin{
                       ],
                     ),
                     Row(
-                      children: [
+                      children: <Widget>[
                         const Text(
                           'original_title -',
                         ),
@@ -242,7 +243,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> with MovieMixin{
                       ],
                     ),
                     Row(
-                      children: [
+                      children: <Widget>[
                         const Text(
                           'overview -',
                         ),
@@ -255,7 +256,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> with MovieMixin{
                       ],
                     ),
                     Row(
-                      children: [
+                      children: <Widget>[
                         const Text(
                           'popularity -',
                         ),
@@ -268,7 +269,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> with MovieMixin{
                       ],
                     ),
                     Row(
-                      children: [
+                      children: <Widget>[
                         const Text(
                           'poster_path -',
                         ),
@@ -281,7 +282,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> with MovieMixin{
                       ],
                     ),
                     Row(
-                      children: [
+                      children: <Widget>[
                         const Text(
                           'release_date -',
                         ),
@@ -294,7 +295,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> with MovieMixin{
                       ],
                     ),
                     Row(
-                      children: [
+                      children: <Widget>[
                         const Text(
                           'title -',
                         ),
@@ -305,7 +306,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> with MovieMixin{
                       ],
                     ),
                     Row(
-                      children: [
+                      children: <Widget>[
                         const Text(
                           'video -',
                         ),
@@ -318,7 +319,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> with MovieMixin{
                       ],
                     ),
                     Row(
-                      children: [
+                      children: <Widget>[
                         const Text(
                           'vote_average -',
                         ),
@@ -331,7 +332,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> with MovieMixin{
                       ],
                     ),
                     Row(
-                      children: [
+                      children: <Widget>[
                         const Text(
                           'vote_count -',
                         ),

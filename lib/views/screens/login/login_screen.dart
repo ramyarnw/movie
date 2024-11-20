@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../widgets/movie_widgets/mixins/auth_mixin.dart';
+
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
