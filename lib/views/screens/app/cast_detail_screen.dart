@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../../model/cast.dart';
 import '../../../model/movie.dart';
-import '../../../model/tv_shows.dart';
+import '../../../model/tv_shows.dart';rt';
 
 import '../../../provider/provider_utils.dart';
 import '../../widgets/movie_widgets/mixins/movie_mixin.dart';

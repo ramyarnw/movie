@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:movie/core/services/storage_service.dart';
-import 'package:movie/data/storage_service_impl.dart';
-import 'package:movie/model/storage_model/storage_item.dart';
 
-import 'edit_data_dialog.dart';
+import '../../../core/services/storage_service.dart';
+import '../../../data/storage_service_impl.dart';
+import '../../../model/storage_model/storage_item.dart';
+import 'edit_data_dialog.dart' show EditDataDialog;
 
 class VaultCard extends StatefulWidget {
   const VaultCard({
@@ -12,7 +12,6 @@ class VaultCard extends StatefulWidget {
   });
 
   final StorageItem item;
-
   @override
   State<VaultCard> createState() => _VaultCardState();
 }
@@ -29,7 +28,7 @@ class _VaultCardState extends State<VaultCard> {
           decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(16),
-              boxShadow: [
+              boxShadow: <BoxShadow>[
                 BoxShadow(
                     offset: const Offset(3, 3),
                     color: Colors.grey.shade300,
@@ -58,13 +57,13 @@ class _VaultCardState extends State<VaultCard> {
             trailing: IconButton(
               icon: const Icon(Icons.edit),
               onPressed: () async {
-                final String updatedValue = await showDialog(
+                final String? updatedValue = await showDialog<String>(
                     context: context,
                     builder: (_) => EditDataDialog(item: widget.item));
-                if (updatedValue.isNotEmpty) {
+                if (updatedValue?.isNotEmpty ?? false) {
                   _storageService
                       .writeSecureData(
-                          newItem: StorageItem((b) => b
+                          newItem: StorageItem((StorageItemBuilder b) => b
                             ..key = widget.item.key
                             ..value = updatedValue))
                       .then((value) {
