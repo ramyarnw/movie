@@ -2,6 +2,7 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+t';
 import '../../../model/app_state.dart';
 import '../../../model/auth_user.dart';
 import '../../../model/movie.dart';

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:movie/views/widgets/movie_widgets/text_field_decoration.dart';
 
 import '../../../model/storage_model/storage_item.dart';
+import 'text_field_decoration.dart';
 
 class AddDataDialog extends StatelessWidget {
-  AddDataDialog({Key? key}) : super(key: key);
+  AddDataDialog({super.key});
   final TextEditingController _keyController = TextEditingController();
   final TextEditingController _valueController = TextEditingController();
   @override
@@ -14,22 +14,23 @@ class AddDataDialog extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          children: [
+          children: <Widget>[
             TextFormField(
               controller: _keyController,
-              decoration: textFieldDecoration(hintText: "Enter Key"),
+              decoration: textFieldDecoration(hintText: 'Enter Key'),
             ),
             TextFormField(
               controller: _valueController,
-              decoration: textFieldDecoration(hintText: "Enter Value"),
+              decoration: textFieldDecoration(hintText: 'Enter Value'),
             ),
             SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
                     onPressed: () {
-                      final StorageItem storageItem = StorageItem((b) => b
-                        ..key = _keyController.text
-                        ..value = _valueController.text);
+                      final StorageItem storageItem =
+                          StorageItem((StorageItemBuilder b) => b
+                            ..key = _keyController.text
+                            ..value = _valueController.text);
                       Navigator.of(context).pop(storageItem);
                     },
                     child: const Text('Secure')))

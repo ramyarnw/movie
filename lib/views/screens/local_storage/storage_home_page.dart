@@ -7,6 +7,7 @@ import '../../../view_model/app_view_model.dart';
 import '../../widgets/movie_widgets/add_data_dialog.dart';
 import '../../widgets/movie_widgets/search_key_value_dialog.dart';
 import '../../widgets/movie_widgets/vault_card.dart';
+
 class StorageHomePage extends StatefulWidget {
   const StorageHomePage({super.key, required this.title});
 
@@ -33,7 +34,8 @@ class _StorageHomePageState extends State<StorageHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final BuiltList<StorageItem> items = context.appState.itemList ?? BuiltList<StorageItem>();
+    final BuiltList<StorageItem> items =
+        context.appState.itemList ?? BuiltList<StorageItem>();
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -75,12 +77,12 @@ class _StorageHomePageState extends State<StorageHomePage> {
               Expanded(
                 child: ElevatedButton(
                   onPressed: () async {
-                    final AppViewModel appViewModel =  context.appViewModel;
+                    final AppViewModel appViewModel = context.appViewModel;
                     final StorageItem? newItem = await showDialog<StorageItem>(
                         context: context, builder: (_) => AddDataDialog());
 
                     if (newItem != null) {
-                     appViewModel
+                      appViewModel
                           .writeSecureData(newItem: newItem)
                           .then((void value) {
                         setState(() {
@@ -101,8 +103,8 @@ class _StorageHomePageState extends State<StorageHomePage> {
                     context.appViewModel
                         .deleteAllSecureData()
                         .then((void value) {
-                          initList();
-                        });
+                      initList();
+                    });
                   },
                   child: const Text('Delete All Data'),
                 ),
