@@ -1,6 +1,7 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:flutter/cupertino.dart';
 import '../core/services/storage_service.dart';
+import '../model/storage_model/storage_item.dart';
 
 class StorageServiceImpl implements StorageService {
   final _secureStorage = const FlutterSecureStorage();
@@ -35,7 +36,7 @@ class StorageServiceImpl implements StorageService {
     final Map<String, String> allData =
         await _secureStorage.readAll(aOptions: _getAndroidOptions());
     final BuiltList<StorageItem> list = allData.entries
-        .map((MapEntry<String, String> e) => StorageItem((b) => b
+        .map((MapEntry<String, String> e) => StorageItem((StorageItemBuilder b) => b
           ..value = e.value
           ..key = e.key))
         .toBuiltList();

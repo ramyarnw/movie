@@ -1,13 +1,13 @@
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
-import 'package:movie/model/serializers.dart';
+import 'serializers.dart';
 
 part 'api_error.g.dart';
 
 abstract class ApiError implements Built<ApiError, ApiErrorBuilder> {
-  ApiError._();
 
   factory ApiError([void Function(ApiErrorBuilder) updates]) = _$ApiError;
+  ApiError._();
 
   Map<String, dynamic> toJson() {
     return serializers.serializeWith(ApiError.serializer, this)!

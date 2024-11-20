@@ -1,17 +1,17 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
-import 'package:movie/model/serializers.dart';
+import 'serializers.dart';
 
 part 'movie.g.dart';
 
 abstract class Movie implements Built<Movie, MovieBuilder> {
-  Movie._();
 
   factory Movie([void Function(MovieBuilder) updates]) = _$Movie;
+  Movie._();
 
   Map<String, dynamic> toJson() {
-    return serializers.serializeWith(Movie.serializer, this)
+    return serializers.serializeWith(Movie.serializer, this)!
         as Map<String, dynamic>;
   }
 
@@ -35,7 +35,7 @@ abstract class Movie implements Built<Movie, MovieBuilder> {
       ..voteCount = 1412
       ..overview =
           'After a shipwreck, an intelligent robot called Roz is stranded on an uninhabited island. '
-      ..genreIds = [16, 878, 10751].toBuiltList().toBuilder();
+      ..genreIds = <int>[16, 878, 10751].toBuiltList().toBuilder();
   }
 
   static Serializer<Movie> get serializer => _$movieSerializer;
