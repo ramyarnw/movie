@@ -1,9 +1,7 @@
-import 'dart:async';
-
 import 'package:built_collection/built_collection.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
-import 'package:state_notifier/state_notifier.dart';
+import 'package:flutter_state_notifier/flutter_state_notifierifier.dart';
 
 import '../core/services/api_service.dart';
 import '../core/services/firebase_service.dart';
@@ -30,32 +28,39 @@ class AppViewModel extends StateNotifier<AppState> {
 
   Future<void> getPopularMovie() async {
     final BuiltList<Movie> popular = await apiService.getPopularMovie();
-    state = state.rebuild((AppStateBuilder p0) => p0.popularMovie = popular.toBuilder());
+    state = state
+        .rebuild((AppStateBuilder p0) => p0.popularMovie = popular.toBuilder());
   }
 
   Future<void> getTopRatedMovie() async {
     final BuiltList<Movie> topRated = await apiService.getTopRatedMovie();
-    state = state.rebuild((AppStateBuilder p1) => p1.topRatedMovie = topRated.toBuilder());
+    state = state.rebuild(
+        (AppStateBuilder p1) => p1.topRatedMovie = topRated.toBuilder());
   }
 
   Future<void> getUpcoming() async {
     final BuiltList<Movie> upcoming = await apiService.getUpcomingMovie();
-    state = state.rebuild((AppStateBuilder p2) => p2.upcomingMovie = upcoming.toBuilder());
+    state = state.rebuild(
+        (AppStateBuilder p2) => p2.upcomingMovie = upcoming.toBuilder());
   }
 
   Future<void> getCastForMovie({required int id}) async {
     final BuiltList<Cast> cast = await apiService.getCastForMovie(id: id);
-    state = state.rebuild((AppStateBuilder p3) => p3.castForMovie = cast.toBuilder());
+    state = state
+        .rebuild((AppStateBuilder p3) => p3.castForMovie = cast.toBuilder());
   }
 
   Future<void> getMoviesOfCast({required int id}) async {
-    final BuiltList<Movie> moviesCast = await apiService.getMoviesOfCast(id: id);
-    state = state.rebuild((AppStateBuilder p4) => p4.moviesOfCast = moviesCast.toBuilder());
+    final BuiltList<Movie> moviesCast =
+        await apiService.getMoviesOfCast(id: id);
+    state = state.rebuild(
+        (AppStateBuilder p4) => p4.moviesOfCast = moviesCast.toBuilder());
   }
 
   Future<void> getTvShowsOfCast({required int id}) async {
     final BuiltList<TvShows> tvCast = await apiService.getTvShowsOfCast(id: id);
-    state = state.rebuild((AppStateBuilder p4) => p4.tvShowsOfCast = tvCast.toBuilder());
+    state = state
+        .rebuild((AppStateBuilder p4) => p4.tvShowsOfCast = tvCast.toBuilder());
   }
 
   Future<void> getMovieForId({required int id}) async {
@@ -83,11 +88,12 @@ class AppViewModel extends StateNotifier<AppState> {
       throw 'user not found';
     }
     if (currentUser.phoneNumber == null) {
-      throw'Phone Number not available';
+      throw 'Phone Number not available';
     }
     final AuthUser user = await fireBaseService.getUser(
         uid: currentUser.uid, phoneNo: currentUser.phoneNumber!);
-    state = state.rebuild((AppStateBuilder p) => p.currentUser = user.toBuilder());
+    state =
+        state.rebuild((AppStateBuilder p) => p.currentUser = user.toBuilder());
   }
 
   Future<void> createMovieReview(
@@ -121,15 +127,18 @@ class AppViewModel extends StateNotifier<AppState> {
     await fireBaseService.updateTvReview(tvId: tvId, review: review);
   }
 
-  Map<String, StreamSubscription<BuiltList<Review>>> movieSubscription = <String, StreamSubscription<BuiltList<Review>>>{};
+  Map<String, StreamSubscription<BuiltList<Review>>> movieSubscription =
+      <String, StreamSubscription<BuiltList<Review>>>{};
 
   @override
   void dispose() {
     super.dispose();
-    for (final StreamSubscription<BuiltList<Review>>b in movieSubscription.values) {
+    for (final StreamSubscription<BuiltList<Review>> b
+        in movieSubscription.values) {
       b.cancel();
     }
-    for (final StreamSubscription<BuiltList<Review>> b in tvSubscription.values) {
+    for (final StreamSubscription<BuiltList<Review>> b
+        in tvSubscription.values) {
       b.cancel();
     }
   }
@@ -143,7 +152,8 @@ class AppViewModel extends StateNotifier<AppState> {
     });
   }
 
-  Map<String, StreamSubscription<BuiltList<Review>>> tvSubscription = <String, StreamSubscription<BuiltList<Review>>>{};
+  Map<String, StreamSubscription<BuiltList<Review>>> tvSubscription =
+      <String, StreamSubscription<BuiltList<Review>>>{};
 
   void listenTvReview({required String tvId}) {
     tvSubscription[tvId] = fireBaseService
@@ -156,13 +166,16 @@ class AppViewModel extends StateNotifier<AppState> {
 
   Future<void> updateUser({required AuthUser user}) async {
     final AuthUser u = await fireBaseService.updateUser(user: user);
-    state = state.rebuild((AppStateBuilder p1) => p1.currentUser = u.toBuilder());
+    state =
+        state.rebuild((AppStateBuilder p1) => p1.currentUser = u.toBuilder());
   }
 
   Future<void> updateProfile(
       {required Uint8List file, required AuthUser user}) async {
-    final AuthUser u = await fireBaseService.updateProfile(user: user, file: file);
-    state = state.rebuild((AppStateBuilder p1) => p1.currentUser = u.toBuilder());
+    final AuthUser u =
+        await fireBaseService.updateProfile(user: user, file: file);
+    state =
+        state.rebuild((AppStateBuilder p1) => p1.currentUser = u.toBuilder());
   }
 
   Future<void> writeSecureData({required StorageItem newItem}) async {
@@ -172,9 +185,10 @@ class AppViewModel extends StateNotifier<AppState> {
 
   Future<void> readSecureData({required String key}) async {
     final String? r = await storageService.readSecureData(key: key);
-    state = state.rebuild((AppStateBuilder a) => a.item = StorageItem((StorageItemBuilder b) => b
-      ..key = key
-      ..value = r ?? '').toBuilder());
+    state = state.rebuild(
+        (AppStateBuilder a) => a.item = StorageItem((StorageItemBuilder b) => b
+          ..key = key
+          ..value = r ?? '').toBuilder());
   }
 
   Future<void> deleteSecureData({required StorageItem item}) async {
