@@ -13,12 +13,12 @@ import 'tv_shows.dart';
 part 'app_state.g.dart';
 
 abstract class AppState implements Built<AppState, AppStateBuilder> {
-
-  factory AppState([void Function(AppStateBuilder) updates]) = _$AppState;
   AppState._();
 
+  factory AppState([void Function(AppStateBuilder) updates]) = _$AppState;
+
   Map<String, dynamic> toJson() {
-    return serializers.serializeWith(AppState.serializer, this)!
+    return serializers.serializeWith(AppState.serializer, this)
         as Map<String, int>;
   }
 
