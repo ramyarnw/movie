@@ -6,6 +6,7 @@ import '../../../model/movie.dart';
 import '../../../model/tv_shows.dart';
 
 import '../../../provider/provider_utils.dart';
+import '../../widgets/movie_widgets/mixins/movie_mixin.dart';
 import 'movie_detail_screen.dart';
 import 'tv_detail_screen.dart';
 
@@ -19,9 +20,9 @@ class CastDetailScreen extends StatefulWidget {
 }
 
 class _CastDetailScreenState extends State<CastDetailScreen>
-    with TickerProviderStateMixin,MovieMixin {
+    with TickerProviderStateMixin,MovieMixin<CastDetailScreen> {
   late TabController tabController;
-  var loading = true;
+  bool loading = true;
 
   @override
   void initState() {
@@ -52,16 +53,16 @@ class _CastDetailScreenState extends State<CastDetailScreen>
   @override
   Widget build(BuildContext context) {
     final BuiltList<Movie> castMovie =
-        context.appState.moviesOfCast ?? BuiltList();
+        context.appState.moviesOfCast ?? BuiltList<Movie>();
     final BuiltList<TvShows> castTvShow =
-        context.appState.tvShowsOfCast ?? BuiltList();
+        context.appState.tvShowsOfCast ?? BuiltList<TvShows>();
     final Cast cast = context.appState.currentPicCast;
     //var cast = Cast();
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 300,
         title: Column(
-          children: [
+          children: <Widget>[
             Text(
               cast.name,
               style: const TextStyle(
@@ -70,7 +71,7 @@ class _CastDetailScreenState extends State<CastDetailScreen>
               ),
             ),
             Row(
-              children: [
+              children: <Widget>[
                 Image.network(
                   cast.posterImage,
                   // width: 150,
@@ -81,9 +82,9 @@ class _CastDetailScreenState extends State<CastDetailScreen>
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                  children: <Widget>[
                     Row(
-                      children: [
+                      children: <Widget>[
                         const Text(
                           'adult -',
                         ),
@@ -94,7 +95,7 @@ class _CastDetailScreenState extends State<CastDetailScreen>
                       ],
                     ),
                     Row(
-                      children: [
+                      children: <Widget>[
                         const Text('Id -'),
                         const SizedBox(
                           width: 50,
@@ -104,7 +105,7 @@ class _CastDetailScreenState extends State<CastDetailScreen>
                     ),
                     //Text(cast.gender.toString()),
                     Row(
-                      children: [
+                      children: <Widget>[
                         const Text('Dept -'),
                         const SizedBox(
                           width: 20,
@@ -113,7 +114,7 @@ class _CastDetailScreenState extends State<CastDetailScreen>
                       ],
                     ),
                     Row(
-                      children: [
+                      children: <Widget>[
                         const Text('Name -'),
                         const SizedBox(
                           width: 10,
@@ -122,7 +123,7 @@ class _CastDetailScreenState extends State<CastDetailScreen>
                       ],
                     ),
                     Row(
-                      children: [
+                      children: <Widget>[
                         const Text('Org -'),
                         const SizedBox(
                           width: 40,
@@ -133,7 +134,7 @@ class _CastDetailScreenState extends State<CastDetailScreen>
                     //Text(cast.popularity.toString()),
                     //Text(cast.profilePath),
                     Row(
-                      children: [
+                      children: <Widget>[
                         const Text('CastId -'),
                         const SizedBox(
                           width: 10,
@@ -227,11 +228,11 @@ class TvTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [
+      children: <Widget>[
         ElevatedButton(
           onPressed: () {
             Navigator.push(context,
-                MaterialPageRoute(builder: (BuildContext context) {
+                MaterialPageRoute<dynamic>(builder: (BuildContext context) {
               return TvDetailScreen(
                 id: tv.id,
               );
@@ -262,11 +263,11 @@ class CastMovieTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [
+      children: <Widget>[
         ElevatedButton(
           onPressed: () {
             Navigator.push(context,
-                MaterialPageRoute(builder: (BuildContext context) {
+                MaterialPageRoute<dynamic>(builder: (BuildContext context) {
               return MovieDetailScreen(
                 id: movie.id,
               );

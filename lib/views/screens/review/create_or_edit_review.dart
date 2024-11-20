@@ -34,7 +34,7 @@ class _CreateOrEditReviewState extends State<CreateOrEditReview> {
     }
     final BuiltList<Review> currentMovieReviews =
         context.read<AppViewModel>().getState().movieReview?[widget.movieId] ??
-            BuiltList();
+            BuiltList<Review>();
     final Review? b =
         currentMovieReviews.where((Review c) => c.id == widget.reviewId).firstOrNull;
     if (b == null) {
@@ -59,7 +59,7 @@ class _CreateOrEditReviewState extends State<CreateOrEditReview> {
               value: review.star,
                 items: <DropdownMenuItem<int>>[
                   for (int i = 1; i <= 5; i++) ...<DropdownMenuItem<int>>[
-                    DropdownMenuItem(
+                    DropdownMenuItem<int>(
                       value: i,
                       child: Text(
                         i.toString(),

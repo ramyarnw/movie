@@ -29,7 +29,7 @@ class _CreateOrEditTvReviewState extends State<CreateOrEditTvReview> {
     }
     final BuiltList<Review> currentTvReviews =
         context.read<AppViewModel>().getState().tvReview?[widget.tvId] ??
-            BuiltList();
+            BuiltList<Review>();
     final Review? b =
         currentTvReviews.where((Review c) => c.id == widget.reviewId).firstOrNull;
     if (b == null) {
@@ -53,7 +53,7 @@ class _CreateOrEditTvReviewState extends State<CreateOrEditTvReview> {
                 value: review.star,
                 items: <DropdownMenuItem<int>>[
                   for (int i = 1; i <= 5; i++) ...<DropdownMenuItem<int>>[
-                    DropdownMenuItem(
+                    DropdownMenuItem<int>(
                       value: i,
                       child: Text(
                         i.toString(),

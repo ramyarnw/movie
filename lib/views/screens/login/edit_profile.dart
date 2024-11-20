@@ -44,14 +44,15 @@ class _EditProfileState extends State<EditProfile> {
             children: <Widget>[
               GestureDetector(
                 onTap: () async {
+                  final AppViewModel appViewModel = context
+                      .read<AppViewModel>();
                   final XFile? file = await ImagePicker()
                       .pickImage(source: ImageSource.gallery);
                   if (file == null) {
                     return;
                   }
                   final Uint8List bytes = await file.readAsBytes();
-                  await context
-                      .read<AppViewModel>()
+                  await appViewModel
                       .updateProfile(file: bytes, user: user);
                 },
                 child: CircleAvatar(

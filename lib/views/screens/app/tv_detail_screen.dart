@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../review/tv_review_screen.dart';
 
 class TvDetailScreen extends StatefulWidget {
-  const TvDetailScreen({super.key});
+  const TvDetailScreen({super.key, required int id});
 
   @override
   State<TvDetailScreen> createState() => _TvDetailScreenState();
@@ -20,7 +20,7 @@ class _TvDetailScreenState extends State<TvDetailScreen> {
           ElevatedButton(
             onPressed: () {
               Navigator.of(context).push(
-                MaterialPageRoute(
+                MaterialPageRoute<dynamic>(
                   builder: (BuildContext c) =>
                       TvReviewScreen(tvId: tvId,),
                 ),

@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:rive/rive.dart';
+//import 'package:rive/rive.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../app/movie_home_page.dart';
@@ -14,7 +14,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  resetNewLaunch() async {
+  Future<void>resetNewLaunch() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     if (kDebugMode) {
       print('SplashScreen:');
@@ -33,14 +33,15 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     //resetNewLaunch();
-    Future.delayed(
+    final NavigatorState n= Navigator.of(context);
+    Future<dynamic>.delayed(
         const Duration(seconds: 2),
             () {
               resetNewLaunch();
 
 
-              return Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) {
+              return n.push(
+            MaterialPageRoute<dynamic>(builder: (BuildContext context) {
               return const MovieHomePage();
             }));
             });

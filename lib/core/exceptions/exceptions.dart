@@ -74,3 +74,8 @@ class SomethingWentWrong extends AppException {
     return 'Something went wrong';
   }
 }
+class FirebaseAppException extends AppException{
+  FirebaseAppException(this.message);
+  final String message;
+}
+

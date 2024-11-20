@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 
 import '../../../model/storage_model/storage_item.dart';
 import '../../../provider/provider_utils.dart';
+import '../../../view_model/app_view_model.dart';
+import '../../widgets/movie_widgets/add_data_dialog.dart';
+import '../../widgets/movie_widgets/search_key_value_dialog.dart';
+import '../../widgets/movie_widgets/vault_card.dart';
 class StorageHomePage extends StatefulWidget {
   const StorageHomePage({super.key, required this.title});
 
@@ -21,7 +25,7 @@ class _StorageHomePageState extends State<StorageHomePage> {
     initList();
   }
 
-  void initList() async {
+  Future<void> initList() async {
     await context.appViewModel.readAllSecureData();
     _loading = false;
     setState(() {});
@@ -29,11 +33,11 @@ class _StorageHomePageState extends State<StorageHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final BuiltList<StorageItem> _items = context.appState.itemList ?? BuiltList();
+    final BuiltList<StorageItem> items = context.appState.itemList ?? BuiltList<StorageItem>();
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
-        actions: [
+        actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.search, color: Colors.black),
             onPressed: () => showDialog(
@@ -44,18 +48,18 @@ class _StorageHomePageState extends State<StorageHomePage> {
       body: Center(
         child: _loading
             ? const CircularProgressIndicator()
-            : _items.isEmpty
+            : items.isEmpty
                 ? const Text('Add data in secure storage to display here.')
                 : ListView.builder(
-                    itemCount: _items.length,
+                    itemCount: items.length,
                     padding: const EdgeInsets.symmetric(horizontal: 8),
                     itemBuilder: (_, int index) {
                       return Dismissible(
-                        key: Key(_items[index].toString()),
-                        child: VaultCard(item: _items[index]),
-                        onDismissed: (direction) async {
+                        key: Key(items[index].toString()),
+                        child: VaultCard(item: items[index]),
+                        onDismissed: (DismissDirection direction) async {
                           await context.appViewModel
-                              .deleteSecureData(item: _items[index]);
+                              .deleteSecureData(item: items[index]);
 
                           initList();
                         },
@@ -67,16 +71,18 @@ class _StorageHomePageState extends State<StorageHomePage> {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8),
           child: Row(
-            children: [
+            children: <Widget>[
               Expanded(
                 child: ElevatedButton(
                   onPressed: () async {
+                    final AppViewModel appViewModel =  context.appViewModel;
                     final StorageItem? newItem = await showDialog<StorageItem>(
                         context: context, builder: (_) => AddDataDialog());
+
                     if (newItem != null) {
-                      context.appViewModel
+                     appViewModel
                           .writeSecureData(newItem: newItem)
-                          .then((value) {
+                          .then((void value) {
                         setState(() {
                           _loading = true;
                         });
@@ -94,7 +100,9 @@ class _StorageHomePageState extends State<StorageHomePage> {
                   onPressed: () async {
                     context.appViewModel
                         .deleteAllSecureData()
-                        .then((value) => initList());
+                        .then((void value) {
+                          initList();
+                        });
                   },
                   child: const Text('Delete All Data'),
                 ),

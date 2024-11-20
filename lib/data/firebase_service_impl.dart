@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/services.dart';
+import '../core/exceptions/exceptions.dart';
 import '../core/services/firebase_service.dart';
 import '../model/auth_user.dart';
 import '../model/review.dart';
@@ -17,13 +18,13 @@ class FireBaseServiceImpl implements FireBaseService {
   @override
   Future<String> sendOtp({required String phoneNo}) async {
     String vid = '';
-    Completer _c = Completer();
+    final Completer<dynamic> c = Completer<dynamic>();
     await auth.verifyPhoneNumber(
       phoneNumber: phoneNo,
       codeSent: (String verificationId, int? resendToken) async {
         vid = verificationId;
-        if (!_c.isCompleted) {
-          _c.complete();
+        if (!c.isCompleted) {
+          c.complete();
         }
       },
       verificationCompleted: (PhoneAuthCredential phoneAuthCredential) async {
@@ -34,12 +35,12 @@ class FireBaseServiceImpl implements FireBaseService {
       },
       codeAutoRetrievalTimeout: (String verificationId) {
         vid = verificationId;
-        if (!_c.isCompleted) {
-          _c.complete();
+        if (!c.isCompleted) {
+          c.complete();
         }
       },
     );
-    await Future.wait([_c.future]);
+    await Future.wait(<Future<dynamic>>[c.future]);
     return vid;
   }
 
@@ -52,7 +53,7 @@ class FireBaseServiceImpl implements FireBaseService {
     final UserCredential user = await auth.signInWithCredential(credential);
     final String? uid = user.user?.uid;
     if (uid == null) {
-      throw 'user not found';
+      throw  FirebaseAppException('user not found');
     }
     return;
   }
@@ -93,7 +94,7 @@ class FireBaseServiceImpl implements FireBaseService {
   Future<void> createMovieReview(
       {required String movieId, required Review review}) async {
     final DocumentReference<Map<String, dynamic>> doc = movieReviewCollection(movieId).doc();
-    final Review a = review.rebuild((b) => b.id = doc.id);
+    final Review a = review.rebuild((ReviewBuilder b) => b.id = doc.id);
     await doc.set(a.toJson());
   }
 
@@ -126,7 +127,7 @@ class FireBaseServiceImpl implements FireBaseService {
         await movieReviewCollection(movieId).doc(reviewId).get();
     final Map<String, dynamic>? data = doc.data();
     if (data == null) {
-      throw 'movie not available';
+      throw FirebaseAppException('movie not available');
     }
     return Review.fromJson(data);
   }
@@ -138,7 +139,7 @@ class FireBaseServiceImpl implements FireBaseService {
         await tvReviewCollection(tvId).doc(reviewId).get();
     final Map<String, dynamic>? data = doc.data();
     if (data == null) {
-      throw 'tv not available';
+      throw FirebaseAppException('tv review not available');
     }
     return Review.fromJson(data);
   }
