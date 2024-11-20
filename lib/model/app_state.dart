@@ -1,6 +1,5 @@
+import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
-import 'package:built_value/serializer.dart';
-value.dart';
 import 'package:built_value/serializer.dart';
 
 import 'auth_user.dart';
@@ -14,7 +13,6 @@ import 'tv_shows.dart';
 part 'app_state.g.dart';
 
 abstract class AppState implements Built<AppState, AppStateBuilder> {
-
   factory AppState([void Function(AppStateBuilder) updates]) = _$AppState;
   AppState._();
 

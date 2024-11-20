@@ -1,4 +1,3 @@
-
 import '../ui.dart';
 import 'navigation/app_routes.dart';
 
@@ -25,9 +24,9 @@ class _HomePageState extends State<HomePage> with AppProviderMixin<HomePage> {
             const AppText(
               'You have pushed the button this many times:',
             ),
-            DisplayLarge(
-              '${appState.count}',
-            ),
+            // DisplayLarge(
+            //   '${appState.count}',
+            // ),
           ],
         ),
       ),

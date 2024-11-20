@@ -1,8 +1,12 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
+import 'package:movie/views/widgets/movie_widgets/add_data_dialog.dart';
+import 'package:movie/views/widgets/movie_widgets/search_key_value_dialog.dart';
+import 'package:movie/views/widgets/movie_widgets/vault_card.dart';
 
 import '../../../model/storage_model/storage_item.dart';
 import '../../../provider/provider_utils.dart';
+
 class StorageHomePage extends StatefulWidget {
   const StorageHomePage({super.key, required this.title});
 
@@ -29,7 +33,8 @@ class _StorageHomePageState extends State<StorageHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final BuiltList<StorageItem> _items = context.appState.itemList ?? BuiltList();
+    final BuiltList<StorageItem> _items =
+        context.appState.itemList ?? BuiltList();
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),

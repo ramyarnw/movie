@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:movie/model/storage_model/storage_item.dart';
-import 'package:movie/views/widgets/movie_widgets/text_field_decoration.dart';
+
+import '../../../model/storage_model/storage_item.dart';
+import 'text_field_decoration.dart';
 
 class EditDataDialog extends StatefulWidget {
-  final StorageItem item;
   const EditDataDialog({super.key, required this.item});
+  final StorageItem item;
 
   @override
   State<EditDataDialog> createState() => _EditDataDialogState();
@@ -25,10 +26,10 @@ class _EditDataDialogState extends State<EditDataDialog> {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          children: [
+          children: <Widget>[
             TextFormField(
               controller: _valueController,
-              decoration: textFieldDecoration(hintText: "Enter Value"),
+              decoration: textFieldDecoration(hintText: 'Enter Value'),
             ),
             SizedBox(
                 width: double.infinity,

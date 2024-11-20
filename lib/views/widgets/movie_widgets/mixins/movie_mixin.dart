@@ -73,7 +73,7 @@ mixin MovieMixin<T extends StatefulWidget> on State<T> {
 
   void listenMovieReview({required String movieId}) {
     try {
-      context.appViewModel.listenMovieReview(movieId: movieId.toString());
+      context.appViewModel.listenMovieReview(movieId: movieId);
     } catch (e) {
       showSnack(e.toString());
     }
@@ -81,7 +81,7 @@ mixin MovieMixin<T extends StatefulWidget> on State<T> {
 
   void listenTvReview({required String tvId}) {
     try {
-      context.appViewModel.listenTvReview(tvId: tvId.toString());
+      context.appViewModel.listenTvReview(tvId: tvId);
     } catch (e) {
       showSnack(e.toString());
     }

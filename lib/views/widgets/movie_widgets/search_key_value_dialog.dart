@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:movie/core/services/storage_service.dart';
-import 'package:movie/data/storage_service_impl.dart';
-import 'package:movie/views/widgets/movie_widgets/text_field_decoration.dart';
+
+import '../../../core/services/storage_service.dart';
+import '../../../data/storage_service_impl.dart';
+import 'text_field_decoration.dart';
 
 class SearchKeyValueDialog extends StatefulWidget {
   const SearchKeyValueDialog({super.key});
@@ -21,10 +22,10 @@ class _SearchKeyValueDialogState extends State<SearchKeyValueDialog> {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          children: [
+          children: <Widget>[
             TextFormField(
               controller: _keyController,
-              decoration: textFieldDecoration(hintText: "Enter Key"),
+              decoration: textFieldDecoration(hintText: 'Enter Key'),
             ),
             SizedBox(
                 width: double.infinity,
@@ -35,11 +36,12 @@ class _SearchKeyValueDialogState extends State<SearchKeyValueDialog> {
                       setState(() {});
                     },
                     child: const Text('Search'))),
-            _value == null
-                ? const SizedBox()
-                : Text(
-                    'Value: $_value',
-                  )
+            if (_value == null)
+              const SizedBox()
+            else
+              Text(
+                'Value: $_value',
+              )
           ],
         ),
       ),

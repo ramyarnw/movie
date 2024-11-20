@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import '../../../model/cast.dart';
 import '../../../model/movie.dart';
 import '../../../model/tv_shows.dart';
-
 import '../../../provider/provider_utils.dart';
+import '../../widgets/movie_widgets/mixins/movie_mixin.dart';
 import 'movie_detail_screen.dart';
 import 'tv_detail_screen.dart';
 
@@ -19,7 +19,7 @@ class CastDetailScreen extends StatefulWidget {
 }
 
 class _CastDetailScreenState extends State<CastDetailScreen>
-    with TickerProviderStateMixin,MovieMixin {
+    with TickerProviderStateMixin, MovieMixin {
   late TabController tabController;
   var loading = true;
 

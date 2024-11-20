@@ -1,7 +1,9 @@
 //import 'package:built_collection/src/list.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
+import 'package:movie/views/widgets/movie_widgets/mixins/movie_mixin.dart';
 import 'package:provider/provider.dart';
+
 import '../../../model/app_state.dart';
 import '../../../model/auth_user.dart';
 import '../../../model/movie.dart';
@@ -79,26 +81,29 @@ class _MovieHomePageState extends State<MovieHomePage>
             color: Colors.black,
             onPressed: () {},
           ),
-          if (user == null) ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (BuildContext context) {
-                      return const LoginScreen();
-                    }));
-                  },
-                  child: const Text('Login')) else GestureDetector(
-                  onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (BuildContext context) {
-                      return const EditProfile();
-                    }));
-                  },
-                  child: CircleAvatar(
-                    child: user.profile?.isNotEmpty ?? false
-                        ? Image.network(user.profile!)
-                        : Text(user.name.toString()),
-                  ),
-                )
+          if (user == null)
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (BuildContext context) {
+                    return const LoginScreen();
+                  }));
+                },
+                child: const Text('Login'))
+          else
+            GestureDetector(
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (BuildContext context) {
+                  return const EditProfile();
+                }));
+              },
+              child: CircleAvatar(
+                child: user.profile?.isNotEmpty ?? false
+                    ? Image.network(user.profile!)
+                    : Text(user.name.toString()),
+              ),
+            )
         ],
         bottom: PreferredSize(
           preferredSize: Size(MediaQuery.of(context).size.width, 60),

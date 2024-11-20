@@ -34,11 +34,7 @@ abstract class AppRouterData extends GoRouteData {
     if (this is UnauthenticatedRouteData) {
       return null;
     }
-    if (this is AuthenticatedRouteData) {
-      if (context.appViewModel.getState().count == null) {
-        return null;
-      }
-    }
+
     return null;
   }
 
