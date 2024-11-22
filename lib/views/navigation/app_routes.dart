@@ -1,10 +1,14 @@
 import 'dart:async';
 
 import 'package:go_router/go_router.dart';
+import 'package:movie/views/screens/app/tv_detail_screen.dart';
 
 import '../../ui.dart' hide RouterUtils;
-import '../home_page.dart';
 import '../profile_page.dart';
+import '../screens/app/cast_detail_screen.dart';
+import '../screens/app/movie_detail_screen.dart';
+import '../screens/app/movie_home_page.dart';
+import '../screens/load_splash/splash_screen.dart';
 import '../terms_page.dart';
 
 part 'app_routes.g.dart';
@@ -70,22 +74,24 @@ abstract class UnauthenticatedRouteData extends AppRouterData {
 }
 
 /// Home Page
-@TypedGoRoute<HomePageRoute>(
+@TypedGoRoute<MovieHomePageRoute>(
+    path: '/homePage',
+    routes: <TypedRoute<RouteData>>[
+      TypedGoRoute<MovieDetailScreenRoute>(path: 'movieDetail', routes: [
+        TypedGoRoute<CastDetailScreenRoute>(path: 'castDetail', routes: [
+          TypedGoRoute<MovieDetailScreenRoute>(path: 'movieDetail', routes: []),
+          TypedGoRoute<TvDetailScreenRoute>(path: 'tvDetail'),
+        ])
+      ]),
+    ])
+@TypedGoRoute<SplashScreenRoute>(
   path: '/',
-  routes: <TypedRoute<RouteData>>[
-    TypedGoRoute<ProfilePageRoute>(
-      path: 'profile/:id',
-    ),
-    TypedGoRoute<TermsPageRoute>(
-      path: 'terms',
-    ),
-  ],
 )
 @immutable
-class HomePageRoute extends AuthenticatedRouteData {
+class MovieHomePageRoute extends AuthenticatedRouteData {
   @override
   Widget buildWidget(BuildContext context, GoRouterState state) {
-    return const HomePage();
+    return const MovieHomePage();
   }
 }
 
@@ -108,5 +114,41 @@ class TermsPageRoute extends UnauthenticatedRouteData {
   @override
   Widget buildWidget(BuildContext context, GoRouterState state) {
     return const TermsPage();
+  }
+}
+
+class MovieDetailScreenRoute extends UnauthenticatedRouteData {
+  MovieDetailScreenRoute({required this.id});
+  final int id;
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return MovieDetailScreen(
+      id: id,
+    );
+  }
+}
+
+class SplashScreenRoute extends UnauthenticatedRouteData {
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const SplashScreen();
+  }
+}
+
+class CastDetailScreenRoute extends UnauthenticatedRouteData {
+  CastDetailScreenRoute({required this.id});
+  final int id;
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return CastDetailScreen(id: id);
+  }
+}
+
+class TvDetailScreenRoute extends UnauthenticatedRouteData {
+  TvDetailScreenRoute({required this.id});
+  final int id;
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return TvDetailScreen(id: id);
   }
 }

@@ -7,29 +7,42 @@ part of 'app_routes.dart';
 // **************************************************************************
 
 List<RouteBase> get $appRoutes => [
-      $homePageRoute,
+      $movieHomePageRoute,
     ];
 
-RouteBase get $homePageRoute => GoRouteData.$route(
-      path: '/',
-      factory: $HomePageRouteExtension._fromState,
+RouteBase get $movieHomePageRoute => GoRouteData.$route(
+      path: '/homePage',
+      factory: $MovieHomePageRouteExtension._fromState,
       routes: [
         GoRouteData.$route(
-          path: 'profile/:id',
-          factory: $ProfilePageRouteExtension._fromState,
-        ),
-        GoRouteData.$route(
-          path: 'terms',
-          factory: $TermsPageRouteExtension._fromState,
+          path: 'movieDetail',
+          factory: $MovieDetailScreenRouteExtension._fromState,
+          routes: [
+            GoRouteData.$route(
+              path: 'castDetail',
+              factory: $CastDetailScreenRouteExtension._fromState,
+              routes: [
+                GoRouteData.$route(
+                  path: 'movieDetail',
+                  factory: $MovieDetailScreenRouteExtension._fromState,
+                ),
+                GoRouteData.$route(
+                  path: 'tvDetail',
+                  factory: $TvDetailScreenRouteExtension._fromState,
+                ),
+              ],
+            ),
+          ],
         ),
       ],
     );
 
-extension $HomePageRouteExtension on HomePageRoute {
-  static HomePageRoute _fromState(GoRouterState state) => HomePageRoute();
+extension $MovieHomePageRouteExtension on MovieHomePageRoute {
+  static MovieHomePageRoute _fromState(GoRouterState state) =>
+      MovieHomePageRoute();
 
   String get location => GoRouteData.$location(
-        '/',
+        '/homePage',
       );
 
   void go(BuildContext context) => context.go(location);
@@ -42,13 +55,17 @@ extension $HomePageRouteExtension on HomePageRoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
-extension $ProfilePageRouteExtension on ProfilePageRoute {
-  static ProfilePageRoute _fromState(GoRouterState state) => ProfilePageRoute(
-        id: int.parse(state.pathParameters['id']!),
+extension $MovieDetailScreenRouteExtension on MovieDetailScreenRoute {
+  static MovieDetailScreenRoute _fromState(GoRouterState state) =>
+      MovieDetailScreenRoute(
+        id: int.parse(state.uri.queryParameters['id']!),
       );
 
   String get location => GoRouteData.$location(
-        '/profile/${Uri.encodeComponent(id.toString())}',
+        '/homePage/movieDetail',
+        queryParams: {
+          'id': id.toString(),
+        },
       );
 
   void go(BuildContext context) => context.go(location);
@@ -61,11 +78,63 @@ extension $ProfilePageRouteExtension on ProfilePageRoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
-extension $TermsPageRouteExtension on TermsPageRoute {
-  static TermsPageRoute _fromState(GoRouterState state) => TermsPageRoute();
+extension $CastDetailScreenRouteExtension on CastDetailScreenRoute {
+  static CastDetailScreenRoute _fromState(GoRouterState state) =>
+      CastDetailScreenRoute(
+        id: int.parse(state.uri.queryParameters['id']!),
+      );
 
   String get location => GoRouteData.$location(
-        '/terms',
+        '/homePage/movieDetail/castDetail',
+        queryParams: {
+          'id': id.toString(),
+        },
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $MovieDetailScreenRouteExtension on MovieDetailScreenRoute {
+  static MovieDetailScreenRoute _fromState(GoRouterState state) =>
+      MovieDetailScreenRoute(
+        id: int.parse(state.uri.queryParameters['id']!),
+      );
+
+  String get location => GoRouteData.$location(
+        '/homePage/movieDetail/castDetail/movieDetail',
+        queryParams: {
+          'id': id.toString(),
+        },
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $TvDetailScreenRouteExtension on TvDetailScreenRoute {
+  static TvDetailScreenRoute _fromState(GoRouterState state) =>
+      TvDetailScreenRoute(
+        id: int.parse(state.uri.queryParameters['id']!),
+      );
+
+  String get location => GoRouteData.$location(
+        '/homePage/movieDetail/castDetail/tvDetail',
+        queryParams: {
+          'id': id.toString(),
+        },
       );
 
   void go(BuildContext context) => context.go(location);

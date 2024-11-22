@@ -33,6 +33,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
+    context.appViewModel.init();
     //resetNewLaunch();
     final NavigatorState n = Navigator.of(context);
     Future<dynamic>.delayed(const Duration(seconds: 2), () {
