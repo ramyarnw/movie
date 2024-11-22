@@ -126,15 +126,10 @@ extension $MovieDetailScreenRouteExtension on MovieDetailScreenRoute {
 
 extension $TvDetailScreenRouteExtension on TvDetailScreenRoute {
   static TvDetailScreenRoute _fromState(GoRouterState state) =>
-      TvDetailScreenRoute(
-        id: int.parse(state.uri.queryParameters['id']!),
-      );
+      TvDetailScreenRoute();
 
   String get location => GoRouteData.$location(
         '/homePage/movieDetail/castDetail/tvDetail',
-        queryParams: {
-          'id': id.toString(),
-        },
       );
 
   void go(BuildContext context) => context.go(location);

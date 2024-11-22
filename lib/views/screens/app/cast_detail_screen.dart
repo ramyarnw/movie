@@ -233,9 +233,7 @@ class TvTile extends StatelessWidget {
           onPressed: () {
             Navigator.push(context,
                 MaterialPageRoute<dynamic>(builder: (BuildContext context) {
-              return TvDetailScreen(
-                id: tv.id,
-              );
+              return const TvDetailScreen();
             }));
           },
           child: Image.network(

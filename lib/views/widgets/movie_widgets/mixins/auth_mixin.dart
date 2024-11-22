@@ -7,16 +7,18 @@ import '../../../screens/login/login_verify_screen.dart';
 
 mixin AuthMixin<T extends StatefulWidget> on State<T> {
   Future<void> sendOtp({required String phoneNo}) async {
+    final NavigatorState n = Navigator.of(context);
+    final ScaffoldMessengerState a = ScaffoldMessenger.of(context);
     try {
-      final String vid =
-          await context.read<AppViewModel>().sendOtp(phoneNo: phoneNo);
-      Navigator.push(
-          context,
-          LoginVerifyScreen(
-            vid: vid,
-          ) as Route<Object?>);
+      final String vid = await context.appViewModel.sendOtp(phoneNo: phoneNo);
+      n.push(
+        MaterialPageRoute<void>(
+            builder: (BuildContext context) => LoginVerifyScreen(
+                  vid: vid,
+                )),
+      );
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
+      a.showSnackBar(
         SnackBar(
           content: Text(
             e.toString(),
@@ -27,11 +29,16 @@ mixin AuthMixin<T extends StatefulWidget> on State<T> {
   }
 
   Future<void> verifyOtp({required String smsCode, required String vid}) async {
+    final NavigatorState n = Navigator.of(context);
+    final ScaffoldMessengerState a = ScaffoldMessenger.of(context);
     try {
       await context.read<AppViewModel>().verifyOtp(smsCode: smsCode, vid: vid);
-      Navigator.push(context, const MovieHomePage() as Route<Object?>);
+      n.push(
+        MaterialPageRoute<void>(
+            builder: (BuildContext context) => const MovieHomePage()),
+      );
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
+      a.showSnackBar(
         SnackBar(content: Text(e.toString())),
       );
     }

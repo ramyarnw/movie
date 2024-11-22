@@ -1,13 +1,13 @@
 import 'dart:async';
 
 import 'package:go_router/go_router.dart';
-import 'package:movie/views/screens/app/tv_detail_screen.dart';
 
 import '../../ui.dart' hide RouterUtils;
 import '../profile_page.dart';
 import '../screens/app/cast_detail_screen.dart';
 import '../screens/app/movie_detail_screen.dart';
 import '../screens/app/movie_home_page.dart';
+import '../screens/app/tv_detail_screen.dart';
 import '../screens/load_splash/splash_screen.dart';
 import '../terms_page.dart';
 
@@ -77,12 +77,16 @@ abstract class UnauthenticatedRouteData extends AppRouterData {
 @TypedGoRoute<MovieHomePageRoute>(
     path: '/homePage',
     routes: <TypedRoute<RouteData>>[
-      TypedGoRoute<MovieDetailScreenRoute>(path: 'movieDetail', routes: [
-        TypedGoRoute<CastDetailScreenRoute>(path: 'castDetail', routes: [
-          TypedGoRoute<MovieDetailScreenRoute>(path: 'movieDetail', routes: []),
-          TypedGoRoute<TvDetailScreenRoute>(path: 'tvDetail'),
-        ])
-      ]),
+      TypedGoRoute<MovieDetailScreenRoute>(
+          path: 'movieDetail',
+          routes: <TypedRoute<RouteData>>[
+            TypedGoRoute<CastDetailScreenRoute>(
+                path: 'castDetail',
+                routes: <TypedRoute<RouteData>>[
+                  TypedGoRoute<MovieDetailScreenRoute>(path: 'movieDetail'),
+                  TypedGoRoute<TvDetailScreenRoute>(path: 'tvDetail'),
+                ])
+          ]),
     ])
 @TypedGoRoute<SplashScreenRoute>(
   path: '/',
@@ -145,10 +149,8 @@ class CastDetailScreenRoute extends UnauthenticatedRouteData {
 }
 
 class TvDetailScreenRoute extends UnauthenticatedRouteData {
-  TvDetailScreenRoute({required this.id});
-  final int id;
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return TvDetailScreen(id: id);
+    return const TvDetailScreen();
   }
 }
