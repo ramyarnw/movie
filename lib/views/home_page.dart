@@ -1,5 +1,4 @@
 import '../ui.dart';
-import 'navigation/app_routes.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key, this.title});
@@ -40,11 +39,6 @@ class _HomePageState extends State<HomePage> with AppProviderMixin<HomePage> {
             },
             tooltip: 'Increment',
             child: const AppIcon(Icons.add),
-          ),
-          FloatingActionButton(
-            onPressed: () => context.go(const ProfilePageRoute(id: 1).location),
-            tooltip: 'Profile Page',
-            child: const AppIcon(Icons.arrow_forward),
           ),
         ],
       ),

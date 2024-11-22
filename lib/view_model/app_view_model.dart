@@ -2,16 +2,15 @@ import 'dart:async';
 
 import 'package:built_collection/built_collection.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:state_notifier/state_notifier.dart';
+import 'package:flutter_state_notifier/flutter_state_notifier.dart';
 
 import '../core/exceptions/exceptions.dart';
 import '../core/services/api_service.dart';
 import '../core/services/firebase_service.dart';
 import '../core/services/storage_service.dart';
-import '../data/api_service_impl.dart';
-import '../data/firebase_service_impl.dart';
-import '../data/storage_service_impl.dart';
+import '../data/repository.dart';
 import '../model/app_state.dart';
 import '../model/auth_user.dart';
 import '../model/cast.dart';
@@ -20,14 +19,31 @@ import '../model/review.dart';
 import '../model/storage_model/storage_item.dart';
 import '../model/tv_shows.dart';
 
+class AppProvider extends StatelessWidget {
+  const AppProvider({super.key, this.child, required this.repo});
+
+  final Widget? child;
+  final AppRepository repo;
+
+  @override
+  Widget build(BuildContext context) {
+    return StateNotifierProvider<AppViewModel, AppState>(
+      create: (_) => AppViewModel(repo),
+      child: child,
+    );
+  }
+}
+
 class AppViewModel extends StateNotifier<AppState> {
-  AppViewModel() : super(AppState());
-
+  AppViewModel(this.repo) : super(AppState());
   AppState getState() => state;
-
-  ApiService apiService = ApiServiceImpl();
-  FireBaseService fireBaseService = FireBaseServiceImpl();
-  StorageService storageService = StorageServiceImpl();
+  final AppRepository repo;
+  ApiService get apiService => repo.apiService;
+  FireBaseService get fireBaseService => repo.fireBaseService;
+  StorageService get storageService => repo.storageService;
+  void init() {
+    repo.init();
+  }
 
   Future<void> getPopularMovie() async {
     final BuiltList<Movie> popular = await apiService.getPopularMovie();
