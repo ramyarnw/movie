@@ -17,11 +17,11 @@ class _HomePageState extends State<HomePage> with AppProviderMixin<HomePage> {
       appBar: AppBar(
         title: AppText(context.strings.apr),
       ),
-      body: Center(
+      body: const Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const AppText(
+            AppText(
               'You have pushed the button this many times:',
             ),
             // DisplayLarge(
@@ -36,7 +36,7 @@ class _HomePageState extends State<HomePage> with AppProviderMixin<HomePage> {
           FloatingActionButton(
             key: keys.homePageKeys.increment,
             onPressed: () {
-              context.appViewModel.increment();
+              // context.appViewModel.increment();
             },
             tooltip: 'Increment',
             child: const AppIcon(Icons.add),
