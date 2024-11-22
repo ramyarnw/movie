@@ -16,7 +16,17 @@ extension UsageSize on double {
     if (this <= 0) {
       return '0 B';
     }
-    const List<String> suffixes = <String>['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+    const List<String> suffixes = <String>[
+      'B',
+      'KB',
+      'MB',
+      'GB',
+      'TB',
+      'PB',
+      'EB',
+      'ZB',
+      'YB'
+    ];
     final int i = (log(this) / log(1024)).floor();
     return '${(this / pow(1024, i)).toStringAsFixed(2)} ${suffixes[i]}';
   }
@@ -123,7 +133,7 @@ class AppPlatformFile extends AppFile {
       if (_chunks.isNotEmpty) {
         return Uint8List.fromList(_chunks);
       }
-      final Completer<void> c = Completer();
+      final Completer<void> c = Completer<void>();
 
       final StreamSubscription<Uint8List> sub = readStream().listen(
         (List<int> event) {

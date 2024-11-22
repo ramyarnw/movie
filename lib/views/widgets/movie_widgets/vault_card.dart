@@ -66,7 +66,7 @@ class _VaultCardState extends State<VaultCard> {
                           newItem: StorageItem((StorageItemBuilder b) => b
                             ..key = widget.item.key
                             ..value = updatedValue))
-                      .then((value) {
+                      .then((void value) {
                     setState(() {});
                   });
                 }

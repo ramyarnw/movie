@@ -1,17 +1,17 @@
 import '../../ui.dart';
 import 'app_theme.dart';
 
-extension _MaterialStateUtils on Set<MaterialState> {
-  Set<MaterialState> get activeStates => <MaterialState>{
-        MaterialState.pressed,
-        MaterialState.selected,
+extension _MaterialStateUtils on Set<WidgetState> {
+  Set<WidgetState> get activeStates => <WidgetState>{
+        WidgetState.pressed,
+        WidgetState.selected,
       };
 
   bool get hasActiveStates {
     return intersection(activeStates).isNotEmpty;
   }
 
-  bool get hasHovered => contains(MaterialState.hovered);
+  bool get hasHovered => contains(WidgetState.hovered);
 }
 
 class AppButtonChild extends StatelessWidget {
@@ -69,19 +69,19 @@ abstract class _AppButton extends StatelessWidget {
   }
 
   OutlinedBorder? resolveButtonShape(
-      BuildContext context, Set<MaterialState> states) {
+      BuildContext context, Set<WidgetState> states) {
     return RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(6.0),
     );
   }
 
-  Color resolveOverlayColor(BuildContext context, Set<MaterialState> states) {
+  Color resolveOverlayColor(BuildContext context, Set<WidgetState> states) {
     return Colors.black12;
   }
 
   Color resolveBackgroundColor(
     BuildContext context,
-    Set<MaterialState> states,
+    Set<WidgetState> states,
   ) {
     final AppButtonTheme appButtonTheme = getAppButtonTheme(context);
     Color? color;
@@ -98,7 +98,7 @@ abstract class _AppButton extends StatelessWidget {
 
   Color resolveForegroundColor(
     BuildContext context,
-    Set<MaterialState> states,
+    Set<WidgetState> states,
   ) {
     final AppButtonTheme appButtonTheme = getAppButtonTheme(context);
     Color? color;
@@ -126,21 +126,21 @@ abstract class _AppButton extends StatelessWidget {
     return ButtonStyle(
       splashFactory: Theme.of(context).splashFactory,
       animationDuration: Duration.zero,
-      shape: MaterialStateProperty.resolveWith(
+      shape: WidgetStateProperty.resolveWith(
         (Set<WidgetState> s) => resolveButtonShape(context, s),
       ),
-      padding: MaterialStateProperty.all(
+      padding: WidgetStateProperty.all(
         const EdgeInsets.symmetric(
           vertical: 10.0,
           horizontal: 18,
         ),
       ),
-      foregroundColor: MaterialStateProperty.resolveWith(
-          (Set<MaterialState> s) => resolveForegroundColor(context, s)),
-      overlayColor: MaterialStateProperty.resolveWith(
-          (Set<MaterialState> s) => resolveOverlayColor(context, s)),
-      backgroundColor: MaterialStateProperty.resolveWith(
-        (Set<MaterialState> s) => resolveBackgroundColor(context, s),
+      foregroundColor: WidgetStateProperty.resolveWith(
+          (Set<WidgetState> s) => resolveForegroundColor(context, s)),
+      overlayColor: WidgetStateProperty.resolveWith(
+          (Set<WidgetState> s) => resolveOverlayColor(context, s)),
+      backgroundColor: WidgetStateProperty.resolveWith(
+        (Set<WidgetState> s) => resolveBackgroundColor(context, s),
       ),
     );
   }

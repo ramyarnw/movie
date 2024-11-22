@@ -12,7 +12,8 @@ Future<void> copyFile({
 }
 
 Future<String> createFolder(String folderPath) async {
-  if (!(await Directory(folderPath).exists())) {
+  final bool hasFolder = Directory(folderPath).existsSync();
+  if (!hasFolder) {
     await Directory(folderPath).create(recursive: true);
   }
   return folderPath;
@@ -20,14 +21,14 @@ Future<String> createFolder(String folderPath) async {
 
 Future<void> deleteFolder(String folderPath) async {
   final Directory dir = Directory(folderPath);
-  if (await dir.exists()) {
+  if (dir.existsSync()) {
     dir.deleteSync(recursive: true);
   }
 }
 
 Future<void> deleteFile(String folderPath) async {
   final File file = File(folderPath);
-  if (await file.exists()) {
+  if (file.existsSync()) {
     file.deleteSync(recursive: true);
   }
 }
@@ -37,7 +38,7 @@ Future<void> renameFolder({
   required String newName,
 }) async {
   final Directory dir = Directory(folderPath);
-  if (!await dir.exists()) {
+  if (!dir.existsSync()) {
     return;
   }
   final List<String> l = folderPath.split('/');
@@ -72,13 +73,13 @@ Future<void> openDirectory({
   if (!await launchUrl(
     url,
   )) {
-    throw 'Cannot Open';
+    throw Exception('Cannot Open');
   }
 }
 
 Future<bool> isDirectoryPathExists(String folderPath) async {
   final Directory dir = Directory(folderPath);
-  if (await dir.exists()) {
+  if (dir.existsSync()) {
     return true;
   }
   return false;
@@ -86,7 +87,7 @@ Future<bool> isDirectoryPathExists(String folderPath) async {
 
 Future<bool> isFilePathExists(String filePath) async {
   final File file = File(filePath);
-  if (await file.exists()) {
+  if (file.existsSync()) {
     return true;
   }
   return false;

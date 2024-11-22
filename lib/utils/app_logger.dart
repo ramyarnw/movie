@@ -11,7 +11,9 @@ class _AppPrinter extends PrettyPrinter {
           lineLength: 80,
           colors: true,
           printEmojis: true,
-          printTime: true,
+          dateTimeFormat: (DateTime d) {
+            return d.toIso8601String();
+          },
           excludeBox: const <Level, bool>{},
           noBoxingByDefault: true,
         ) {
@@ -24,7 +26,7 @@ class _AppPrinter extends PrettyPrinter {
   }
 
   @override
-  String stringifyMessage(event) {
+  String stringifyMessage(dynamic event) {
     final String seperator = '=' * 70;
     return <String>[seperator, super.stringifyMessage(event), seperator]
         .join('\n');
@@ -68,7 +70,7 @@ Stacktrace: $s
 
   void e(dynamic message) => _log.e(message);
 
-  void v(dynamic message) => _log.v(message);
+  void v(dynamic message) => _log.t(message);
 
   void w(dynamic message) => _log.w(message);
 }
