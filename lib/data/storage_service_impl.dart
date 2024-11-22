@@ -1,10 +1,12 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
 import '../core/services/storage_service.dart';
 import '../model/storage_model/storage_item.dart';
 
 class StorageServiceImpl implements StorageService {
-  final _secureStorage = const FlutterSecureStorage();
+  final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
 
   AndroidOptions _getAndroidOptions() => const AndroidOptions(
         encryptedSharedPreferences: true,
@@ -36,9 +38,10 @@ class StorageServiceImpl implements StorageService {
     final Map<String, String> allData =
         await _secureStorage.readAll(aOptions: _getAndroidOptions());
     final BuiltList<StorageItem> list = allData.entries
-        .map((MapEntry<String, String> e) => StorageItem((StorageItemBuilder b) => b
-          ..value = e.value
-          ..key = e.key))
+        .map((MapEntry<String, String> e) =>
+            StorageItem((StorageItemBuilder b) => b
+              ..value = e.value
+              ..key = e.key))
         .toBuiltList();
     return list;
   }
@@ -46,7 +49,7 @@ class StorageServiceImpl implements StorageService {
   @override
   Future<String?> readSecureData({required String key}) async {
     debugPrint('Reading data having key $key');
-    final String readData =
+    final String? readData =
         await _secureStorage.read(key: key, aOptions: _getAndroidOptions());
     return readData;
   }

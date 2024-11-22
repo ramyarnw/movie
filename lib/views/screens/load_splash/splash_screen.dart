@@ -1,6 +1,8 @@
 import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:rive/rive.dart';
 //import 'package:rive/rive.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -14,7 +16,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  Future<void>resetNewLaunch() async {
+  Future<void> resetNewLaunch() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     if (kDebugMode) {
       print('SplashScreen:');
@@ -22,41 +24,37 @@ class _SplashScreenState extends State<SplashScreen> {
     if (kDebugMode) {
       print(prefs.getBool('newLaunch'));
     }
-    await   prefs.setBool('newLaunch', true);
+    await prefs.setBool('newLaunch', true);
     if (kDebugMode) {
       print(prefs.getBool('newLaunch'));
     }
-
   }
 
   @override
   void initState() {
     super.initState();
     //resetNewLaunch();
-    final NavigatorState n= Navigator.of(context);
-    Future<dynamic>.delayed(
-        const Duration(seconds: 2),
-            () {
-              resetNewLaunch();
+    final NavigatorState n = Navigator.of(context);
+    Future<dynamic>.delayed(const Duration(seconds: 2), () {
+      resetNewLaunch();
 
-
-              return n.push(
-            MaterialPageRoute<dynamic>(builder: (BuildContext context) {
-              return const MovieHomePage();
-            }));
-            });
+      return n.push(MaterialPageRoute<dynamic>(builder: (BuildContext context) {
+        return const MovieHomePage();
+      }));
+    });
   }
+
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
-        body: SingleChildScrollView(
+    return Scaffold(
+      body: SingleChildScrollView(
           child: Container(
               color: Colors.white,
-              child: Center(
+              child: const Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    const Text('Movie App',
+                    Text('Movie App',
                         style: TextStyle(color: Colors.blue, fontSize: 40)),
                     Center(
                       widthFactor: Checkbox.width,
@@ -64,9 +62,7 @@ class _SplashScreenState extends State<SplashScreen> {
                     )
                   ],
                 ),
-              ))
-        ),
-
-        );
+              ))),
+    );
   }
 }

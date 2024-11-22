@@ -21,18 +21,18 @@ class _LoadPageState extends State<LoadPage> {
     loadNewLaunch();
   }
 
-  Future<void>loadNewLaunch() async {
+  Future<void> loadNewLaunch() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       prefs.setBool('newLaunch', false);
-      final bool _newLaunch = prefs.getBool('newLaunch') ?? true;
+      final bool newL = prefs.getBool('newLaunch') ?? true;
       if (kDebugMode) {
         print('newLaunch:');
       }
       if (kDebugMode) {
-        print(_newLaunch);
+        print(newL);
       }
-      newLaunch = _newLaunch;
+      newLaunch = newL;
     });
   }
 

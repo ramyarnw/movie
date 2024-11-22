@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:state_notifier/state_notifier.dart';
 
+import '../core/exceptions/exceptions.dart';
 import '../core/services/api_service.dart';
 import '../core/services/firebase_service.dart';
 import '../core/services/storage_service.dart';
@@ -87,10 +88,10 @@ class AppViewModel extends StateNotifier<AppState> {
     await fireBaseService.verifyOtp(smsCode: smsCode, vid: vid);
     final User? currentUser = FirebaseAuth.instance.currentUser;
     if (currentUser == null) {
-      throw 'user not found';
+      throw FirebaseAppException('user not found');
     }
     if (currentUser.phoneNumber == null) {
-      throw 'Phone Number not available';
+      throw FirebaseAppException('Phone Number not available');
     }
     final AuthUser user = await fireBaseService.getUser(
         uid: currentUser.uid, phoneNo: currentUser.phoneNumber!);
