@@ -4,11 +4,18 @@ import 'package:go_router/go_router.dart';
 
 import '../../ui.dart' hide RouterUtils;
 import '../profile_page.dart';
-import '../screens/app/cast_detail_screen.dart';
-import '../screens/app/movie_detail_screen.dart';
-import '../screens/app/movie_home_page.dart';
-import '../screens/app/tv_detail_screen.dart';
-import '../screens/load_splash/splash_screen.dart';
+import '../screens/movie/cast/cast_detail_screen.dart';
+import '../screens/movie/login/edit_profile.dart';
+import '../screens/movie/login/login_screen.dart';
+import '../screens/movie/login/login_verify_screen.dart';
+import '../screens/movie/movie/movie_detail_screen.dart';
+import '../screens/movie/movie/movie_home_page.dart';
+import '../screens/movie/movie/review/create_or_edit_review.dart';
+import '../screens/movie/movie/review/movie_review_screen.dart';
+import '../screens/movie/tv_shows/tv_detail_screen.dart';
+import '../screens/movie/tv_shows/tv_review/create_or_edit_tv_review.dart';
+import '../screens/movie/tv_shows/tv_review_screen.dart';
+import '../screens/splash/splash_screen.dart';
 import '../terms_page.dart';
 
 part 'app_routes.g.dart';
@@ -74,23 +81,8 @@ abstract class UnauthenticatedRouteData extends AppRouterData {
 }
 
 /// Home Page
-@TypedGoRoute<MovieHomePageRoute>(
-    path: '/homePage',
-    routes: <TypedRoute<RouteData>>[
-      TypedGoRoute<MovieDetailScreenRoute>(
-          path: 'movieDetail',
-          routes: <TypedRoute<RouteData>>[
-            TypedGoRoute<CastDetailScreenRoute>(
-                path: 'castDetail',
-                routes: <TypedRoute<RouteData>>[
-                  TypedGoRoute<MovieDetailScreenRoute>(path: 'movieDetail'),
-                  TypedGoRoute<TvDetailScreenRoute>(path: 'tvDetail'),
-                ])
-          ]),
-    ])
-@TypedGoRoute<SplashScreenRoute>(
-  path: '/',
-)
+@TypedGoRoute<MovieHomePageRoute>(path: '/homePage')
+
 @immutable
 class MovieHomePageRoute extends AuthenticatedRouteData {
   @override
@@ -120,37 +112,136 @@ class TermsPageRoute extends UnauthenticatedRouteData {
     return const TermsPage();
   }
 }
+//movieDetailScreen
+@TypedGoRoute<MovieDetailScreenRoute>(path: '/movieDetail/:mid', name: 'md')
 
 class MovieDetailScreenRoute extends UnauthenticatedRouteData {
-  MovieDetailScreenRoute({required this.id});
-  final int id;
+  MovieDetailScreenRoute({required this.mid});
+
+  final int mid;
+
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return MovieDetailScreen(
-      id: id,
+      id: mid,
     );
   }
 }
-
+//splashScreen
+@TypedGoRoute<SplashScreenRoute>(
+  path: '/',
+)
 class SplashScreenRoute extends UnauthenticatedRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return const SplashScreen();
   }
 }
+//castDetailScreen
+@TypedGoRoute<CastDetailScreenRoute>(path: '/castDetail/:id')
 
 class CastDetailScreenRoute extends UnauthenticatedRouteData {
   CastDetailScreenRoute({required this.id});
+
   final int id;
+
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return CastDetailScreen(id: id);
   }
 }
+//tvDetailScreen
+@TypedGoRoute<TvDetailScreenRoute>(path: '/tvDetail')
 
 class TvDetailScreenRoute extends UnauthenticatedRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return const TvDetailScreen();
+  }
+}
+//editProfile
+@TypedGoRoute<EditProfileRoute>(path: '/editProfile')
+
+class EditProfileRoute extends UnauthenticatedRouteData {
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const EditProfile();
+  }
+}
+//loginScreen
+@TypedGoRoute<LoginScreenRoute>(
+  path: '/loginScreen',
+)
+class LoginScreenRoute extends UnauthenticatedRouteData {
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const LoginScreen();
+  }
+}
+//movieReviewPage
+@TypedGoRoute<MovieReviewPageRoute>(
+    path: '/movieReview/:rid', name: 'movieReview')
+class MovieReviewPageRoute extends UnauthenticatedRouteData {
+  MovieReviewPageRoute({required this.rid});
+
+  final int rid;
+
+  @override
+  Widget buildWidget(BuildContext context, GoRouterState state) {
+    return MovieReviewScreen(movieId: rid);
+  }
+}
+//tvReviewScreen
+@TypedGoRoute<TvReviewScreenRoute>(
+  path: '/tvReview/:id',
+)
+class TvReviewScreenRoute extends UnauthenticatedRouteData {
+  TvReviewScreenRoute({required this.id});
+
+  final int id;
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return TvReviewScreen(tvId: id);
+  }
+}
+//createOrEditReview
+@TypedGoRoute<CreateOrEditReviewRoute>(path: '/createMovieReview/:cid')
+
+class CreateOrEditReviewRoute extends UnauthenticatedRouteData {
+  CreateOrEditReviewRoute({required this.cid});
+
+  final int cid;
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return CreateOrEditReview(movieId: cid.toString());
+  }
+}
+//createOrEditTvReview
+@TypedGoRoute<CreateOrEditTvReviewRoute>(path: '/createTvReview/:id')
+
+class CreateOrEditTvReviewRoute extends UnauthenticatedRouteData {
+  CreateOrEditTvReviewRoute({required this.id});
+
+  final int id;
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return CreateOrEditTvReview(tvId: id.toString());
+  }
+}
+
+//loginVerifyScreen
+@TypedGoRoute<LoginVerifyScreenRoute>(path: '/loginVerify/:vid')
+
+class LoginVerifyScreenRoute extends UnauthenticatedRouteData {
+  LoginVerifyScreenRoute(this.vid);
+
+  final String vid;
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return LoginVerifyScreen(vid: vid);
   }
 }

@@ -4,8 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
-import '../../../model/auth_user.dart';
-import '../../../view_model/app_view_model.dart';
+import '../../../../model/auth_user.dart';
+import '../../../../provider/provider_utils.dart';
+import '../../../../view_model/app_view_model.dart';
+import '../../../widgets/app_bar.dart';
+import '../../../widgets/app_image.dart';
+import '../../../widgets/app_scaffold.dart';
+import '../../../widgets/app_text_form_field.dart';
+import '../../../widgets/app_texts.dart';
 
 class EditProfile extends StatefulWidget {
   const EditProfile({super.key});
@@ -25,7 +31,7 @@ class _EditProfileState extends State<EditProfile> {
   @override
   void initState()   {
     super.initState();
-    user = context.read<AppViewModel>().getState().currentUser!;
+    user = context.appViewModel.getState().currentUser!;
   }
 
   @override
@@ -35,9 +41,9 @@ class _EditProfileState extends State<EditProfile> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text('Edit profile'),
+    return AppScaffold(
+        appBar: ApplicationAppBar(
+          title: const AppText('Edit profile'),
         ),
         body: Center(
           child: Column(
@@ -45,7 +51,7 @@ class _EditProfileState extends State<EditProfile> {
               GestureDetector(
                 onTap: () async {
                   final AppViewModel appViewModel = context
-                      .read<AppViewModel>();
+                      .appViewModel;
                   final XFile? file = await ImagePicker()
                       .pickImage(source: ImageSource.gallery);
                   if (file == null) {
@@ -57,11 +63,11 @@ class _EditProfileState extends State<EditProfile> {
                 },
                 child: CircleAvatar(
                   child: user.profile?.isNotEmpty ?? false
-                      ? Image.network(user.profile!)
-                      : Text(user.name.toString()),
+                      ? AppImage.network(user.profile!)
+                      : AppText(user.name.toString()),
                 ),
               ),
-              TextFormField(
+              AppTextFormField(
                 initialValue: user.name,
                 onChanged: (String s) {
                   user = user.rebuild((AuthUserBuilder p) => p.name = s);
@@ -72,7 +78,7 @@ class _EditProfileState extends State<EditProfile> {
                   labelText: 'Name',
                 ),
               ),
-              TextFormField(
+              AppTextFormField(
                 enabled: false,
                 initialValue: user.phoneNo,
                 decoration: const InputDecoration(
@@ -84,7 +90,7 @@ class _EditProfileState extends State<EditProfile> {
                   onPressed: () {
                     context.read<AppViewModel>().updateUser(user: user);
                   },
-                  child: const Text('Update User'))
+                  child: const AppText('Update User'))
             ],
           ),
         ));

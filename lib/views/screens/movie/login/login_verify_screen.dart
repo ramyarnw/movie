@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../widgets/movie_widgets/mixins/auth_mixin.dart';
+import '../../../mixins/auth_mixin.dart';
 class LoginVerifyScreen extends StatefulWidget {
   const LoginVerifyScreen({super.key, required this.vid});
 

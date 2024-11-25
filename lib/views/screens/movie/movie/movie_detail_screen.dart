@@ -1,15 +1,12 @@
 import 'package:built_collection/built_collection.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-import '../../../model/app_state.dart';
-import '../../../model/cast.dart';
-import '../../../model/movie.dart';
-
-import '../../../provider/provider_utils.dart';
-import '../../widgets/components/movie_detail_component.dart';
-import '../../widgets/movie_widgets/mixins/movie_mixin.dart';
-import '../review/movie_review_screen.dart';
+import '../../../../model/app_state.dart';
+import '../../../../model/cast.dart';
+import '../../../../model/movie.dart';
+import '../../../../ui.dart';
+import '../../../mixins/movie_mixin.dart';
+import '../../../navigation/app_routes.dart';
+import 'movie_component/movie_detail_component.dart';
 
 class MovieDetailScreen extends StatefulWidget {
   const MovieDetailScreen({super.key, required this.id});
@@ -20,7 +17,8 @@ class MovieDetailScreen extends StatefulWidget {
   State<MovieDetailScreen> createState() => _MovieDetailScreenState();
 }
 
-class _MovieDetailScreenState extends State<MovieDetailScreen> with MovieMixin<MovieDetailScreen>{
+class _MovieDetailScreenState extends State<MovieDetailScreen>
+    with MovieMixin<MovieDetailScreen> {
   bool loading = false;
 
   @override
@@ -40,31 +38,6 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> with MovieMixin<M
     });
   }
 
-  // List casts = [
-  //   'assets/molly_ringwald.png',
-  //   'assets/molly_ringwald.png',
-  //   'assets/molly_ringwald.png',
-  //   'assets/molly_ringwald.png',
-  //   'assets/molly_ringwald.png',
-  //   'assets/molly_ringwald.png',
-  //   'assets/molly_ringwald.png',
-  //   'assets/molly_ringwald.png',
-  //   'assets/molly_ringwald.png',
-  //   'assets/molly_ringwald.png',
-  // ];
-  // List castName = [
-  //   'Molly',
-  //   'Molly',
-  //   'Molly',
-  //   'Molly',
-  //   'Molly',
-  //   'Molly',
-  //   'Molly',
-  //   'Molly',
-  //   'Molly',
-  //   'Molly',
-  // ];
-
   @override
   Widget build(BuildContext context) {
     final Movie? movie = context.appState.currentPic;
@@ -74,9 +47,8 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> with MovieMixin<M
     if (movie == null) {
       return Container();
     }
-    //var cast = Cast();
-    return Scaffold(
-      appBar: AppBar(
+    return AppScaffold(
+      appBar: ApplicationAppBar(
         centerTitle: true,
         toolbarHeight: 300,
         flexibleSpace: Image.network(
@@ -94,12 +66,14 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> with MovieMixin<M
                     alignment: Alignment.topRight,
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute<dynamic>(
-                            builder: (BuildContext c) =>
-                                MovieReviewScreen(movieId: movie.id),
-                          ),
-                        );
+                        context
+                            .go(MovieReviewPageRoute(rid: movie.id).location);
+                        // Navigator.of(context).push(
+                        //   MaterialPageRoute<dynamic>(
+                        //     builder: (BuildContext c) =>
+                        //         MovieReviewScreen(movieId: movie.id),
+                        //   ),
+                        // );
                       },
                       child: const Text('Review'),
                     ),
@@ -116,7 +90,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> with MovieMixin<M
                     ),
                   ],
                 ),
-                Text(
+                AppText(
                   movie.title,
                   style: const TextStyle(fontSize: 20, color: Colors.red),
                 )
@@ -127,18 +101,18 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> with MovieMixin<M
         ),
       ),
       body: loading
-          ? const CircularProgressIndicator()
+          ? const AppProgressIndicator()
           : Column(
               children: <Widget>[
-                const Text(
+                const AppText(
                   'SYNOPSIS',
                   style: TextStyle(fontSize: 20, color: Colors.black),
                 ),
-                Text(
+                AppText(
                   movie.overview,
                   style: const TextStyle(fontSize: 15, color: Colors.black),
                 ),
-                const Text(
+                const AppText(
                   'Cast',
                   style: TextStyle(fontSize: 20, color: Colors.black),
                 ),
@@ -148,16 +122,12 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> with MovieMixin<M
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (BuildContext context, int index) {
                         final Cast p = castMovie[index];
-                        // final cast = casts[index];
-                        // final name = castName[index];
                         return CastComponent(
                           cast: p,
-                          // castName: name,
-                          // imageURL: cast,
                         );
                       }),
                 ),
-                const Text(
+                const AppText(
                   'ABOUT',
                   style: TextStyle(fontSize: 20, color: Colors.black),
                 ),
@@ -166,7 +136,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> with MovieMixin<M
                   children: <Widget>[
                     Row(
                       children: <Widget>[
-                        const Text(
+                        const AppText(
                           'adult -',
                         ),
                         const SizedBox(
@@ -179,167 +149,167 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> with MovieMixin<M
                     ),
                     Row(
                       children: <Widget>[
-                        const Text(
+                        const AppText(
                           'backdrop_path -',
                         ),
                         const SizedBox(
                           width: 40,
                         ),
-                        Text(
+                        AppText(
                           movie.backdropPath,
                         ),
                       ],
                     ),
                     Row(
                       children: <Widget>[
-                        const Text(
+                        const AppText(
                           'genre_ids -',
                         ),
                         const SizedBox(
                           width: 70,
                         ),
-                        Text(
+                        AppText(
                           movie.genreIds.toString(),
                         ),
                       ],
                     ),
                     Row(
                       children: <Widget>[
-                        const Text(
+                        const AppText(
                           'id -',
                         ),
                         const SizedBox(
                           width: 120,
                         ),
-                        Text(
+                        AppText(
                           movie.id.toString(),
                         ),
                       ],
                     ),
                     Row(
                       children: <Widget>[
-                        const Text(
+                        const AppText(
                           'original_language -',
                         ),
                         const SizedBox(
                           width: 20,
                         ),
-                        Text(
+                        AppText(
                           movie.originalLanguage,
                         )
                       ],
                     ),
                     Row(
                       children: <Widget>[
-                        const Text(
+                        const AppText(
                           'original_title -',
                         ),
                         const SizedBox(
                           width: 50,
                         ),
-                        Text(
+                        AppText(
                           movie.originalTitle,
                         ),
                       ],
                     ),
                     Row(
                       children: <Widget>[
-                        const Text(
+                        const AppText(
                           'overview -',
                         ),
                         const SizedBox(
                           width: 80,
                         ),
-                        Text(
+                        AppText(
                           movie.overview,
                         ),
                       ],
                     ),
                     Row(
                       children: <Widget>[
-                        const Text(
+                        const AppText(
                           'popularity -',
                         ),
                         const SizedBox(
                           width: 70,
                         ),
-                        Text(
+                        AppText(
                           movie.popularity.toString(),
                         ),
                       ],
                     ),
                     Row(
                       children: <Widget>[
-                        const Text(
+                        const AppText(
                           'poster_path -',
                         ),
                         const SizedBox(
                           width: 50,
                         ),
-                        Text(
+                        AppText(
                           movie.posterPath,
                         ),
                       ],
                     ),
                     Row(
                       children: <Widget>[
-                        const Text(
+                        const AppText(
                           'release_date -',
                         ),
                         const SizedBox(
                           width: 50,
                         ),
-                        Text(
+                        AppText(
                           movie.releaseDate,
                         ),
                       ],
                     ),
                     Row(
                       children: <Widget>[
-                        const Text(
+                        const AppText(
                           'title -',
                         ),
                         const SizedBox(
                           width: 110,
                         ),
-                        Text(movie.title),
+                        AppText(movie.title),
                       ],
                     ),
                     Row(
                       children: <Widget>[
-                        const Text(
+                        const AppText(
                           'video -',
                         ),
                         const SizedBox(
                           width: 100,
                         ),
-                        Text(
+                        AppText(
                           movie.video.toString(),
                         ),
                       ],
                     ),
                     Row(
                       children: <Widget>[
-                        const Text(
+                        const AppText(
                           'vote_average -',
                         ),
                         const SizedBox(
                           width: 50,
                         ),
-                        Text(
+                        AppText(
                           movie.voteAverage.toString(),
                         ),
                       ],
                     ),
                     Row(
                       children: <Widget>[
-                        const Text(
+                        const AppText(
                           'vote_count -',
                         ),
                         const SizedBox(
                           width: 60,
                         ),
-                        Text(
+                        AppText(
                           movie.voteCount.toString(),
                         ),
                       ],

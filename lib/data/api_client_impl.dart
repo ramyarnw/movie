@@ -16,11 +16,5 @@ class ApiClientImpl extends ApiClient {
 
   }
 
-  @override
-  void setTenantCompanyID({
-    required String tid,
-    required String cid,
-  }) {
 
-  }
 }

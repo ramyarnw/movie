@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../provider/provider_utils.dart';
+import '../../provider/provider_utils.dart';
 
 mixin MovieMixin<T extends StatefulWidget> on State<T> {
   void showSnack(String e) {

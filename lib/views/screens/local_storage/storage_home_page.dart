@@ -4,6 +4,10 @@ import 'package:flutter/material.dart';
 import '../../../model/storage_model/storage_item.dart';
 import '../../../provider/provider_utils.dart';
 import '../../../view_model/app_view_model.dart';
+import '../../widgets/app_bar.dart';
+import '../../widgets/app_progress_indicator.dart';
+import '../../widgets/app_scaffold.dart';
+import '../../widgets/app_texts.dart';
 import '../../widgets/movie_widgets/add_data_dialog.dart';
 import '../../widgets/movie_widgets/search_key_value_dialog.dart';
 import '../../widgets/movie_widgets/vault_card.dart';
@@ -36,8 +40,8 @@ class _StorageHomePageState extends State<StorageHomePage> {
   Widget build(BuildContext context) {
     final BuiltList<StorageItem> items =
         context.appState.itemList ?? BuiltList<StorageItem>();
-    return Scaffold(
-      appBar: AppBar(
+    return AppScaffold(
+      appBar: ApplicationAppBar(
         title: Text(widget.title),
         actions: <Widget>[
           IconButton(
@@ -49,9 +53,9 @@ class _StorageHomePageState extends State<StorageHomePage> {
       ),
       body: Center(
         child: _loading
-            ? const CircularProgressIndicator()
+            ? const AppProgressIndicator()
             : items.isEmpty
-                ? const Text('Add data in secure storage to display here.')
+                ? const AppText('Add data in secure storage to display here.')
                 : ListView.builder(
                     itemCount: items.length,
                     padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -92,7 +96,7 @@ class _StorageHomePageState extends State<StorageHomePage> {
                       });
                     }
                   },
-                  child: const Text('Add Data'),
+                  child: const AppText('Add Data'),
                 ),
               ),
               const SizedBox(width: 8),
@@ -106,7 +110,7 @@ class _StorageHomePageState extends State<StorageHomePage> {
                       initList();
                     });
                   },
-                  child: const Text('Delete All Data'),
+                  child: const AppText('Delete All Data'),
                 ),
               ),
             ],

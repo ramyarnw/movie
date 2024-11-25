@@ -1,22 +1,10 @@
-//import 'package:built_collection/src/list.dart';
 import 'package:built_collection/built_collection.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-t';
-import '../../../model/app_state.dart';
-import '../../../model/auth_user.dart';
-import '../../../model/movie.dart';
-import '../../../view_model/app_view_model.dart';
-import '../../widgets/movie_widgets/mixins/movie_mixin.dart';
-import '../login/edit_profile.dart';
-import '../login/login_screen.dart';
-import 'movie_detail_screen.dart';
 
-extension ProviderUtensils on BuildContext {
-  AppViewModel get appViewModel => read<AppViewModel>();
-
-  AppState get appState => watch<AppState>();
-}
+import '../../../../model/auth_user.dart';
+import '../../../../model/movie.dart';
+import '../../../../ui.dart';
+import '../../../mixins/movie_mixin.dart';
+import '../../../navigation/app_routes.dart';
 
 class MovieHomePage extends StatefulWidget {
   const MovieHomePage({super.key});
@@ -64,43 +52,48 @@ class _MovieHomePageState extends State<MovieHomePage>
     final BuiltList<Movie> topRated =
         context.appState.topRatedMovie ?? BuiltList<Movie>();
     final AuthUser? user = context.appState.currentUser;
-    return Scaffold(
-      appBar: AppBar(
+    return AppScaffold(
+      appBar: ApplicationAppBar(
         leading: IconButton(
-          icon: const Icon(Icons.menu),
+          icon: const AppIcon(Icons.menu),
           color: Colors.black,
           onPressed: () {},
         ),
-        title: const Text(
+        title: const AppText(
           'Book Movie',
           style: TextStyle(fontSize: 15, color: Colors.black),
         ),
         actions: <Widget>[
           IconButton(
-            icon: const Icon(Icons.brightness_3),
+            icon: const AppIcon(Icons.brightness_3),
             color: Colors.black,
             onPressed: () {},
           ),
-          if (user == null) ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute<dynamic>(builder: (BuildContext context) {
-                      return const LoginScreen();
-                    }));
-                  },
-                  child: const Text('Login')) else GestureDetector(
-                  onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute<dynamic>(builder: (BuildContext context) {
-                      return const EditProfile();
-                    }));
-                  },
-                  child: CircleAvatar(
-                    child: user.profile?.isNotEmpty ?? false
-                        ? Image.network(user.profile!)
-                        : Text(user.name.toString()),
-                  ),
-                )
+          if (user == null)
+            ElevatedButton(
+                onPressed: () {
+                  context.go(LoginScreenRoute().location);
+                  // Navigator.push(context, MaterialPageRoute<dynamic>(
+                  //     builder: (BuildContext context) {
+                  //   return const LoginScreen();
+                  // }));
+                },
+                child: const Text('Login'))
+          else
+            GestureDetector(
+              onTap: () {
+                context.go(EditProfileRoute().location);
+                // Navigator.push(context,
+                //     MaterialPageRoute<dynamic>(builder: (BuildContext context) {
+                //   return const EditProfile();
+                // }));
+              },
+              child: CircleAvatar(
+                child: user.profile?.isNotEmpty ?? false
+                    ? Image.network(user.profile!)
+                    : Text(user.name.toString()),
+              ),
+            )
         ],
         bottom: PreferredSize(
           preferredSize: Size(MediaQuery.of(context).size.width, 60),
@@ -125,7 +118,7 @@ class _MovieHomePageState extends State<MovieHomePage>
         ),
       ),
       body: loading
-          ? const Center(child: CircularProgressIndicator())
+          ? const Center(child: AppProgressIndicator())
           : TabBarView(
               controller: tabController,
               children: <Widget>[
@@ -140,8 +133,7 @@ class _MovieHomePageState extends State<MovieHomePage>
 
                     return MovieTile(
                       movie: p,
-                    ); /*Image.network(
-                  images[index], semanticLabel: movieTitle[index]);*/
+                    );
                   },
                 ),
                 GridView.builder(
@@ -152,14 +144,9 @@ class _MovieHomePageState extends State<MovieHomePage>
                       mainAxisSpacing: 4.0),
                   itemBuilder: (BuildContext context, int index) {
                     final Movie p = upcoming[index];
-                    //final image = images[index];
-                    // final title = movieTitle[index];
                     return MovieTile(
                       movie: p,
-                      // title: title,
-                      // image: image,
-                    ); /* Image.network(
-                  images[index], semanticLabel: movieTitle[index]);*/
+                    );
                   },
                 ),
                 GridView.builder(
@@ -173,7 +160,6 @@ class _MovieHomePageState extends State<MovieHomePage>
                     return MovieTile(
                       movie: p,
                     );
-                    //Image.network(images[index],semanticLabel: movieTitle[index]);
                   },
                 ),
               ],
@@ -197,12 +183,7 @@ class MovieTile extends StatelessWidget {
       children: <Widget>[
         ElevatedButton(
           onPressed: () {
-            Navigator.push(context,
-                MaterialPageRoute<dynamic>(builder: (BuildContext context) {
-              return MovieDetailScreen(
-                id: movie.id,
-              );
-            }));
+            context.go(MovieDetailScreenRoute(mid: movie.id).location);
           },
           child: Image.network(
             movie.posterImage,

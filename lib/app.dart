@@ -1,7 +1,10 @@
 import 'dart:async';
 
+import 'package:firebase_core/firebase_core.dart';
+
 import 'data/repository.dart';
 import 'env/environment.dart';
+import 'firebase_options.dart';
 import 'intl/i18n.dart';
 import 'ui.dart';
 import 'utils/error_utils.dart';
@@ -10,9 +13,12 @@ import 'views/navigation/app_routes.dart';
 import 'views/widgets/app_theme.dart';
 
 Future<void> app(Environment env) async {
+
   await runZonedGuarded<Future<void>>(
     () async {
+      WidgetsFlutterBinding.ensureInitialized();
       final AppRepository repo = AppRepository(env);
+      await Firebase.initializeApp(options:DefaultFirebaseOptions.currentPlatform );
       runApp(
         AppProvider(
           repo: repo,

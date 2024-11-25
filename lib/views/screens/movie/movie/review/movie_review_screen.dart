@@ -1,10 +1,9 @@
 import 'package:built_collection/built_collection.dart';
-import 'package:flutter/material.dart';
 
-import '../../../model/review.dart';
-import '../../../provider/provider_utils.dart';
-import '../../widgets/movie_widgets/mixins/movie_mixin.dart';
-import 'create_or_edit_review.dart';
+import '../../../../../model/review.dart';
+import '../../../../../ui.dart';
+import '../../../../mixins/movie_mixin.dart';
+import '../../../../navigation/app_routes.dart';
 
 
 class MovieReviewScreen extends StatefulWidget {
@@ -23,30 +22,25 @@ class _MovieReviewScreenState extends State<MovieReviewScreen> with MovieMixin<M
     listenMovieReview(movieId: widget.movieId.toString());
   }
 
-  // void listenMovieReview() {
-  //   context
-  //       .appViewModel
-  //       .listenMovieReview(movieId: widget.movieId.toString());
-  // }
-
   @override
   Widget build(BuildContext context) {
     final BuiltList<Review> review =
         context.appState.movieReview?[widget.movieId] ?? BuiltList<Review>();
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Movie Review Screen'),
+    return AppScaffold(
+      appBar: ApplicationAppBar(
+        title: const AppText('Movie Review Screen'),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(onPressed: () {
-        Navigator.push(context,
-            MaterialPageRoute<dynamic>(builder: (BuildContext context) {
-              return CreateOrEditReview(movieId: widget.movieId.toString());
-            },
-            ),
-        );
-      }, child: const Icon(Icons.add),),
+        context.go(CreateOrEditReviewRoute(cid: widget.movieId).location);
+        // Navigator.push(context,
+        //     MaterialPageRoute<dynamic>(builder: (BuildContext context) {
+        //       return CreateOrEditReview(movieId: widget.movieId.toString());
+        //     },
+        //     ),
+        // );
+      }, child: const AppIcon(Icons.add),),
 
 
       body: ListView.builder(
@@ -54,8 +48,8 @@ class _MovieReviewScreenState extends State<MovieReviewScreen> with MovieMixin<M
           itemBuilder: (BuildContext context, int index) {
             final Review p = review[index];
             return ListTile(
-              title: Text(p.comments ?? ''),
-              subtitle: Text(p.star.toString()),
+              title: AppText(p.comments ?? ''),
+              subtitle: AppText(p.star.toString()),
             );
           }),
     );

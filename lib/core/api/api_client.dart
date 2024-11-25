@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:built_collection/built_collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:stack_trace/stack_trace.dart';
@@ -8,6 +9,39 @@ import '../../model/api_error.dart';
 import '../exceptions/exceptions.dart';
 
 extension ResponseUtils on http.Response {
+  List<Map<String, dynamic>> getBodyList(String key) {
+    try {
+      final Map<String, dynamic> jsonBody =
+          jsonDecode(body) as Map<String, dynamic>;
+      final List<dynamic> keyValue = jsonBody[key] as List<dynamic>;
+      return keyValue.cast<Map<String, dynamic>>();
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+    throw Exception('Data Failed to Decode');
+  }
+
+  List<Map<String, dynamic>> getJsonList(String key) {
+    return getBodyList(key);
+  }
+
+  BuiltList<T> getListData<T>(
+      String key, T Function(Map<String, dynamic>) fromJson) {
+    final List<T> data = <T>[];
+    final List<Map<String, dynamic>> jsonList = getJsonList(key);
+    for (final Map<String, dynamic> i in jsonList) {
+      data.add(fromJson(i));
+    }
+    return data.toBuiltList();
+  }
+
+  T getData<T>(T Function(Map<String, dynamic>) fromJson) {
+    final Map<String, dynamic> l = jsonDecode(body) as Map<String, dynamic>;
+    return fromJson(l);
+  }
+
   bool get isSuccess {
     return statusCode >= 200 && statusCode < 300;
   }
@@ -93,11 +127,6 @@ abstract class ApiClient {
   }
 
   void setAuthorizationKey(String? key);
-
-  void setTenantCompanyID({
-    required String tid,
-    required String cid,
-  });
 
   Map<String, String> get defaultHeaders => <String, String>{};
 

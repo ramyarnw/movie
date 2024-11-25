@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../../widgets/movie_widgets/mixins/auth_mixin.dart';
-
+import '../../../mixins/auth_mixin.dart';
+import '../../../widgets/app_bar.dart';
+import '../../../widgets/app_scaffold.dart';
+import '../../../widgets/app_text_form_field.dart';
+import '../../../widgets/app_texts.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -27,12 +30,12 @@ class _LoginScreenState extends State<LoginScreen> with AuthMixin<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
+    return AppScaffold(
+      appBar: ApplicationAppBar(),
       body: Center(
         child: Column(
           children: <Widget>[
-            TextField(
+            AppTextFormField(
               controller: _controller,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
@@ -42,17 +45,8 @@ class _LoginScreenState extends State<LoginScreen> with AuthMixin<LoginScreen> {
             ElevatedButton(
               onPressed: () async {
                 await sendOtp(phoneNo: _controller.text);
-                // String vid = await context
-                //         .read<AppViewModel>()
-                //     .sendOtp(phoneNo: _controller.text);
-                // Navigator.push(context,
-                //     MaterialPageRoute(builder: (BuildContext context) {
-                //   return LoginVerifyScreen(
-                //     vid: vid,
-                //   );
-                // }));
               },
-              child: const Text('Send OTP'),
+              child: const AppText('Send OTP'),
             )
           ],
         ),
