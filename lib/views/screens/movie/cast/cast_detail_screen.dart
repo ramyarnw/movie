@@ -1,14 +1,12 @@
 import 'package:built_collection/built_collection.dart';
-import 'package:flutter/material.dart';
 
-import '../../../model/cast.dart';
-import '../../../model/movie.dart';
-import '../../../model/tv_shows.dart';rt';
-
-import '../../../provider/provider_utils.dart';
-import '../../widgets/movie_widgets/mixins/movie_mixin.dart';
-import 'movie_detail_screen.dart';
-import 'tv_detail_screen.dart';
+import '../../../../model/cast.dart';
+import '../../../../model/movie.dart';
+import '../../../../model/tv_shows.dart';
+import '../../../../ui.dart';
+import '../../../mixins/movie_mixin.dart';
+import '../../../navigation/app_routes.dart';
+import '../../../widgets/app_image.dart';
 
 class CastDetailScreen extends StatefulWidget {
   const CastDetailScreen({super.key, required this.id});
@@ -20,7 +18,7 @@ class CastDetailScreen extends StatefulWidget {
 }
 
 class _CastDetailScreenState extends State<CastDetailScreen>
-    with TickerProviderStateMixin,MovieMixin<CastDetailScreen> {
+    with TickerProviderStateMixin, MovieMixin<CastDetailScreen> {
   late TabController tabController;
   bool loading = true;
 
@@ -56,14 +54,13 @@ class _CastDetailScreenState extends State<CastDetailScreen>
         context.appState.moviesOfCast ?? BuiltList<Movie>();
     final BuiltList<TvShows> castTvShow =
         context.appState.tvShowsOfCast ?? BuiltList<TvShows>();
-    final Cast cast = context.appState.currentPicCast;
-    //var cast = Cast();
-    return Scaffold(
-      appBar: AppBar(
+    final Cast cast = context.appState.currentPicCast ?? Cast();
+    return AppScaffold(
+      appBar: ApplicationAppBar(
         toolbarHeight: 300,
         title: Column(
           children: <Widget>[
-            Text(
+            AppText(
               cast.name,
               style: const TextStyle(
                 fontSize: 30,
@@ -72,10 +69,10 @@ class _CastDetailScreenState extends State<CastDetailScreen>
             ),
             Row(
               children: <Widget>[
-                Image.network(
+                AppImage.network(
                   cast.posterImage,
                   // width: 150,
-                  height: 150,
+                 // height: 150,
                 ),
                 const SizedBox(
                   width: 30,
@@ -85,67 +82,63 @@ class _CastDetailScreenState extends State<CastDetailScreen>
                   children: <Widget>[
                     Row(
                       children: <Widget>[
-                        const Text(
+                        const AppText(
                           'adult -',
                         ),
                         const SizedBox(
                           width: 20,
                         ),
-                        Text(cast.adult.toString()),
+                        AppText(cast.adult.toString()),
                       ],
                     ),
                     Row(
                       children: <Widget>[
-                        const Text('Id -'),
+                        const AppText('Id -'),
                         const SizedBox(
                           width: 50,
                         ),
-                        Text(cast.id.toString()),
+                        AppText(cast.id.toString()),
                       ],
                     ),
                     //Text(cast.gender.toString()),
                     Row(
                       children: <Widget>[
-                        const Text('Dept -'),
+                        const AppText('Dept -'),
                         const SizedBox(
                           width: 20,
                         ),
-                        Text(cast.knownForDepartment),
+                        AppText(cast.knownForDepartment),
                       ],
                     ),
                     Row(
                       children: <Widget>[
-                        const Text('Name -'),
+                        const AppText('Name -'),
                         const SizedBox(
                           width: 10,
                         ),
-                        Text(cast.name),
+                        AppText(cast.name),
                       ],
                     ),
                     Row(
                       children: <Widget>[
-                        const Text('Org -'),
+                        const AppText('Org -'),
                         const SizedBox(
                           width: 40,
                         ),
-                        Text(cast.originalName),
+                        AppText(cast.originalName),
                       ],
                     ),
                     //Text(cast.popularity.toString()),
                     //Text(cast.profilePath),
                     Row(
                       children: <Widget>[
-                        const Text('CastId -'),
+                        const AppText('CastId -'),
                         const SizedBox(
                           width: 10,
                         ),
-                        Text(cast.castId.toString()),
+                        AppText(cast.castId.toString()),
                       ],
                     ),
-                    // Text(cast.profilePath),
-                    //Text(cast.character),
-                    //Text(cast.creditId),
-                    //Text(cast.order.toString()),
                   ],
                 )
               ],
@@ -171,7 +164,7 @@ class _CastDetailScreenState extends State<CastDetailScreen>
         ),
       ),
       body: loading
-          ? const Center(child: CircularProgressIndicator())
+          ? const Center(child: AppProgressIndicator())
           : TabBarView(
               controller: tabController,
               children: <Widget>[
@@ -183,13 +176,7 @@ class _CastDetailScreenState extends State<CastDetailScreen>
                       mainAxisSpacing: 4.0),
                   itemBuilder: (BuildContext context, int index) {
                     final Movie p = castMovie[index];
-                    // final image = images[index];
-                    // final title = movieTitle[index];
                     return CastMovieTile(movie: p);
-                    // title: title,
-                    // image: image,
-                    /*Image.network(
-                  images[index], semanticLabel: movieTitle[index]);*/
                   },
                 ),
                 GridView.builder(
@@ -200,14 +187,9 @@ class _CastDetailScreenState extends State<CastDetailScreen>
                       mainAxisSpacing: 4.0),
                   itemBuilder: (BuildContext context, int index) {
                     final TvShows p = castTvShow[index];
-                    // final image = images[index];
-                    // final title = movieTitle[index];
                     return TvTile(
                       tv: p,
-                      // title: title,
-                      // image: image,
                     );
-                    //Image.network(images[index],semanticLabel: movieTitle[index]);
                   },
                 ),
               ],
@@ -231,10 +213,11 @@ class TvTile extends StatelessWidget {
       children: <Widget>[
         ElevatedButton(
           onPressed: () {
-            Navigator.push(context,
-                MaterialPageRoute<dynamic>(builder: (BuildContext context) {
-              return const TvDetailScreen();
-            }));
+            context.go(TvDetailScreenRoute().location);
+            // Navigator.push(context,
+            //     MaterialPageRoute<dynamic>(builder: (BuildContext context) {
+            //   return const TvDetailScreen();
+            // }));
           },
           child: Image.network(
             tv.posterImage,
@@ -242,8 +225,7 @@ class TvTile extends StatelessWidget {
             width: 80,
           ),
         ),
-        Text(tv.name),
-        //Text(title),
+        AppText(tv.name),
       ],
     );
   }
@@ -264,20 +246,20 @@ class CastMovieTile extends StatelessWidget {
       children: <Widget>[
         ElevatedButton(
           onPressed: () {
-            Navigator.push(context,
-                MaterialPageRoute<dynamic>(builder: (BuildContext context) {
-              return MovieDetailScreen(
-                id: movie.id,
-              );
-            }));
+            context.go(MovieDetailScreenRoute(mid: movie.id).location);
+            // Navigator.push(context,
+            //     MaterialPageRoute<dynamic>(builder: (BuildContext context) {
+            //   return MovieDetailScreen(
+            //     id: movie.id,
+            //   );
+            // }));
           },
-          child: Image.network(
+          child: AppImage.network(
             movie.posterImage,
             //image,
-            width: 80,
           ),
         ),
-        Text(movie.title),
+        AppText(movie.title),
         //Text(title),
       ],
     );

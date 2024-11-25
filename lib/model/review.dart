@@ -6,6 +6,7 @@ part 'review.g.dart';
 
 abstract class Review implements Built<Review, ReviewBuilder> {
   factory Review([void Function(ReviewBuilder) updates]) = _$Review;
+
   Review._();
 
   Map<String, dynamic> toJson() {
@@ -18,8 +19,12 @@ abstract class Review implements Built<Review, ReviewBuilder> {
   }
 
   static Serializer<Review> get serializer => _$reviewSerializer;
+
   int get star;
+
   String? get comments;
+
   String get id;
+
   String get userId;
 }

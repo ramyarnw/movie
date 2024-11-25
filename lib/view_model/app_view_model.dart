@@ -18,6 +18,7 @@ import '../model/movie.dart';
 import '../model/review.dart';
 import '../model/storage_model/storage_item.dart';
 import '../model/tv_shows.dart';
+import '../provider/app_state_notifier.dart';
 
 class AppProvider extends StatelessWidget {
   const AppProvider({super.key, this.child, required this.repo});
@@ -34,13 +35,17 @@ class AppProvider extends StatelessWidget {
   }
 }
 
-class AppViewModel extends StateNotifier<AppState> {
+class AppViewModel extends AppStateNotifier<AppState> {
   AppViewModel(this.repo) : super(AppState());
-  AppState getState() => state;
+
   final AppRepository repo;
+
   ApiService get apiService => repo.apiService;
+
   FireBaseService get fireBaseService => repo.fireBaseService;
+
   StorageService get storageService => repo.storageService;
+
   void init() {
     repo.init();
   }

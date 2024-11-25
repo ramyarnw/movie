@@ -1,11 +1,16 @@
-
 import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 
-import '../../../model/review.dart';
-import '../../../view_model/app_view_model.dart';
+import '../../../../../model/review.dart';
+import '../../../../../provider/provider_utils.dart';
+import '../../../../../view_model/app_view_model.dart';
+import '../../../../widgets/app_bar.dart';
+import '../../../../widgets/app_scaffold.dart';
+import '../../../../widgets/app_text_form_field.dart';
+import '../../../../widgets/app_texts.dart';
+import '../../../../widgets/dropdown_button_form_field.dart';
 
 class CreateOrEditReview extends StatefulWidget {
   const CreateOrEditReview({super.key, required this.movieId, this.reviewId});
@@ -33,10 +38,11 @@ class _CreateOrEditReviewState extends State<CreateOrEditReview> {
       return;
     }
     final BuiltList<Review> currentMovieReviews =
-        context.read<AppViewModel>().getState().movieReview?[widget.movieId] ??
+        context.appViewModel.getState().movieReview?[widget.movieId] ??
             BuiltList<Review>();
-    final Review? b =
-        currentMovieReviews.where((Review c) => c.id == widget.reviewId).firstOrNull;
+    final Review? b = currentMovieReviews
+        .where((Review c) => c.id == widget.reviewId)
+        .firstOrNull;
     if (b == null) {
       return;
     }
@@ -50,18 +56,18 @@ class _CreateOrEditReviewState extends State<CreateOrEditReview> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
+    return AppScaffold(
+      appBar: ApplicationAppBar(),
       body: Center(
         child: Column(
           children: <Widget>[
-            DropdownButtonFormField<int>(
-              value: review.star,
+            AppDropdownButtonFormField<int>(
+                value: review.star,
                 items: <DropdownMenuItem<int>>[
                   for (int i = 1; i <= 5; i++) ...<DropdownMenuItem<int>>[
                     DropdownMenuItem<int>(
                       value: i,
-                      child: Text(
+                      child: AppText(
                         i.toString(),
                       ),
                     ),
@@ -74,7 +80,7 @@ class _CreateOrEditReviewState extends State<CreateOrEditReview> {
                   review = review.rebuild((ReviewBuilder p0) => p0.star = v);
                   setState(() {});
                 }),
-            TextFormField(
+            AppTextFormField(
               initialValue: review.comments,
               onChanged: (String s) {
                 review = review.rebuild((ReviewBuilder p) => p.comments = s);
@@ -88,7 +94,7 @@ class _CreateOrEditReviewState extends State<CreateOrEditReview> {
             ElevatedButton(
               onPressed: () async {
                 if (widget.reviewId != null) {
-                  await context.read<AppViewModel>().updateMovieReview(
+                  await context.appViewModel.updateMovieReview(
                       movieId: widget.movieId, review: review);
                 } else {
                   await context.read<AppViewModel>().createMovieReview(
@@ -103,7 +109,7 @@ class _CreateOrEditReviewState extends State<CreateOrEditReview> {
                       );
                 }
               },
-              child: Text(widget.reviewId != null ? 'Update' : 'Create'),
+              child: AppText(widget.reviewId != null ? 'Update' : 'Create'),
             )
           ],
         ),

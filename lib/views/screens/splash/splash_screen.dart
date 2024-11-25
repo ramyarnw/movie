@@ -1,12 +1,8 @@
 import 'dart:async';
-
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:rive/rive.dart';
-//import 'package:rive/rive.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../app/movie_home_page.dart';
+import '../../../ui.dart';
+import '../../navigation/app_routes.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -35,13 +31,13 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     context.appViewModel.init();
     //resetNewLaunch();
-    final NavigatorState n = Navigator.of(context);
+    //Navigator.of(context);
     Future<dynamic>.delayed(const Duration(seconds: 2), () {
       resetNewLaunch();
-
-      return n.push(MaterialPageRoute<dynamic>(builder: (BuildContext context) {
-        return const MovieHomePage();
-      }));
+      return context.go(MovieHomePageRoute().location);
+        //n.push(MaterialPageRoute<dynamic>(builder: (BuildContext context) {
+       // return const MovieHomePage();
+      //}));
     });
   }
 
@@ -57,10 +53,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   children: <Widget>[
                     Text('Movie App',
                         style: TextStyle(color: Colors.blue, fontSize: 40)),
-                    Center(
-                      widthFactor: Checkbox.width,
-                      child: RiveAnimation.asset('assets/star.riv'),
-                    )
+                AppProgressIndicator(),
                   ],
                 ),
               ))),

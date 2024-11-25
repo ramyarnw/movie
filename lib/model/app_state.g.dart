@@ -17,11 +17,7 @@ class _$AppStateSerializer implements StructuredSerializer<AppState> {
   @override
   Iterable<Object?> serialize(Serializers serializers, AppState object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object?>[
-      'currentPicCast',
-      serializers.serialize(object.currentPicCast,
-          specifiedType: const FullType(Cast)),
-    ];
+    final result = <Object?>[];
     Object? value;
     value = object.popularMovie;
     if (value != null) {
@@ -77,6 +73,13 @@ class _$AppStateSerializer implements StructuredSerializer<AppState> {
         ..add('currentPic')
         ..add(
             serializers.serialize(value, specifiedType: const FullType(Movie)));
+    }
+    value = object.currentPicCast;
+    if (value != null) {
+      result
+        ..add('currentPicCast')
+        ..add(
+            serializers.serialize(value, specifiedType: const FullType(Cast)));
     }
     value = object.currentUser;
     if (value != null) {
@@ -229,7 +232,7 @@ class _$AppState extends AppState {
   @override
   final Movie? currentPic;
   @override
-  final Cast currentPicCast;
+  final Cast? currentPicCast;
   @override
   final AuthUser? currentUser;
   @override
@@ -252,16 +255,13 @@ class _$AppState extends AppState {
       this.moviesOfCast,
       this.tvShowsOfCast,
       this.currentPic,
-      required this.currentPicCast,
+      this.currentPicCast,
       this.currentUser,
       this.movieReview,
       this.tvReview,
       this.item,
       this.itemList})
-      : super._() {
-    BuiltValueNullFieldError.checkNotNull(
-        currentPicCast, r'AppState', 'currentPicCast');
-  }
+      : super._();
 
   @override
   AppState rebuild(void Function(AppStateBuilder) updates) =>
@@ -418,7 +418,7 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
       _moviesOfCast = $v.moviesOfCast?.toBuilder();
       _tvShowsOfCast = $v.tvShowsOfCast?.toBuilder();
       _currentPic = $v.currentPic?.toBuilder();
-      _currentPicCast = $v.currentPicCast.toBuilder();
+      _currentPicCast = $v.currentPicCast?.toBuilder();
       _currentUser = $v.currentUser?.toBuilder();
       _movieReview = $v.movieReview?.toBuilder();
       _tvReview = $v.tvReview?.toBuilder();
@@ -455,7 +455,7 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
               moviesOfCast: _moviesOfCast?.build(),
               tvShowsOfCast: _tvShowsOfCast?.build(),
               currentPic: _currentPic?.build(),
-              currentPicCast: currentPicCast.build(),
+              currentPicCast: _currentPicCast?.build(),
               currentUser: _currentUser?.build(),
               movieReview: _movieReview?.build(),
               tvReview: _tvReview?.build(),
@@ -479,7 +479,7 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
         _$failedField = 'currentPic';
         _currentPic?.build();
         _$failedField = 'currentPicCast';
-        currentPicCast.build();
+        _currentPicCast?.build();
         _$failedField = 'currentUser';
         _currentUser?.build();
         _$failedField = 'movieReview';

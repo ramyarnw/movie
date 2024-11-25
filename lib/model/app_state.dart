@@ -41,7 +41,7 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
 
   Movie? get currentPic;
 
-  Cast get currentPicCast;
+  Cast? get currentPicCast;
 
   AuthUser? get currentUser;
 

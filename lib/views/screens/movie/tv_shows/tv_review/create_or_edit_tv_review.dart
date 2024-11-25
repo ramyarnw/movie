@@ -2,8 +2,14 @@ import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../model/review.dart';
-import '../../../view_model/app_view_model.dart';
+import '../../../../../model/review.dart';
+import '../../../../../provider/provider_utils.dart';
+import '../../../../../view_model/app_view_model.dart';
+import '../../../../widgets/app_bar.dart';
+import '../../../../widgets/app_scaffold.dart';
+import '../../../../widgets/app_text_form_field.dart';
+import '../../../../widgets/app_texts.dart';
+import '../../../../widgets/dropdown_button_form_field.dart';
 
 class CreateOrEditTvReview extends StatefulWidget {
   const CreateOrEditTvReview({super.key, required this.tvId, this.reviewId});
@@ -28,7 +34,7 @@ class _CreateOrEditTvReviewState extends State<CreateOrEditTvReview> {
       return;
     }
     final BuiltList<Review> currentTvReviews =
-        context.read<AppViewModel>().getState().tvReview?[widget.tvId] ??
+        context.appViewModel.getState().tvReview?[widget.tvId] ??
             BuiltList<Review>();
     final Review? b =
         currentTvReviews.where((Review c) => c.id == widget.reviewId).firstOrNull;
@@ -44,12 +50,12 @@ class _CreateOrEditTvReviewState extends State<CreateOrEditTvReview> {
   }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
+    return AppScaffold(
+      appBar: ApplicationAppBar(),
       body: Center(
         child: Column(
           children: <Widget>[
-            DropdownButtonFormField<int>(
+            AppDropdownButtonFormField<int>(
                 value: review.star,
                 items: <DropdownMenuItem<int>>[
                   for (int i = 1; i <= 5; i++) ...<DropdownMenuItem<int>>[
@@ -68,7 +74,7 @@ class _CreateOrEditTvReviewState extends State<CreateOrEditTvReview> {
                   review = review.rebuild((ReviewBuilder p0) => p0.star = v);
                   setState(() {});
                 }),
-            TextFormField(
+            AppTextFormField(
               initialValue: review.comments,
               onChanged: (String s) {
                 review = review.rebuild((ReviewBuilder p) => p.comments = s);
@@ -97,7 +103,7 @@ class _CreateOrEditTvReviewState extends State<CreateOrEditTvReview> {
                   );
                 }
               },
-              child: Text(widget.reviewId != null ? 'Update' : 'Create'),
+              child: AppText(widget.reviewId != null ? 'Update' : 'Create'),
             )
           ],
         ),
